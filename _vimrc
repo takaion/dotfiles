@@ -15,6 +15,7 @@ set number
 set ruler
 set showcmd
 set listchars=tab:▸\ ,trail:-
+set scrolloff=4
 
 " Search
 set ignorecase
@@ -31,7 +32,6 @@ set smartindent
 set cindent
 set backspace=indent,eol,start
 set vb t_vb=
-" set list
 
 " Tab
 set tabstop=4
@@ -39,8 +39,14 @@ set shiftwidth=4
 set expandtab
 set smarttab
 set shiftround
-" set nowrap
 
 " カーソルを行頭、行末で止まらないようにする
 set whichwrap=b,s,h,l,<,>,[,]
+
+" Files
+set confirm
+set hidden
+set autoread
+set noswapfile
+set nobackup
 
