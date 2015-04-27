@@ -14,6 +14,8 @@ set backupdir=$HOME/.vim/backup
 set number
 set ruler
 set showcmd
+set laststatus=2
+set list
 set listchars=tab:▸\ ,trail:-
 set scrolloff=4
 
