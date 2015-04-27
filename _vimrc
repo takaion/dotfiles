@@ -28,6 +28,7 @@ set history=10000
 " 新しい行のインデントを現在行と同じにする
 " set autoindent
 set showmatch
+set autoindent
 set smartindent
 set cindent
 set backspace=indent,eol,start
