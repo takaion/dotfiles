@@ -35,6 +35,8 @@
     c = commit
     ci = commit -a # All modified files
     cad = commit -m 'Add' -m ''
+    cmd = commit -m 'Modify' -m ''
+    cdl = commit -m 'Deleted' -m ''
     cam = commit -a --amend
     co = checkout
     # branch
