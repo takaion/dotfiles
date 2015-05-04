@@ -80,3 +80,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 PROMPT='%n@%m: %~%(!,#,$) '
+
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
