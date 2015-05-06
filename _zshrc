@@ -88,7 +88,7 @@ autoload -Uz colors
 colors
 
 # Vim 風キーバインドにする
-bindkeys -v
+bindkey -v
 
 # ヒストリファイルの設定
 HISTFILE=~/.zsh_history
@@ -107,7 +107,7 @@ autoload -Uz compinit
 compinit
 
 # 大小関係なく補完
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # ../ の後は今いるディレクトリを保管しない
 zstyle ':completion:*' ignore-parents parent pwd ..
@@ -132,9 +132,6 @@ setopt no_flow_control
 
 # Ctrl-D で zsh を終了しない
 setopt ignore_eof
-
-# '#' 以降をコメントとして扱う
-setopt interactiove_comments
 
 # ディレクトリ名だけでcdする
 setopt auto_cd
