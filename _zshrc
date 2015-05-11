@@ -96,7 +96,10 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 
 # プロンプト
-PROMPT='%n@%m: %~%(!,#,$) '
+PROMPT='[%n@%m: %~]
+%(!,#,$) '
+
+PROMPT2='[%n]%_>'
 
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
