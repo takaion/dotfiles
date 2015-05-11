@@ -148,6 +148,15 @@ setopt hist_ignore_space
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
+# コマンド訂正
+setopt correct
+
+# 詰めて表示
+setopt list_packed
+
+# 移動したディレクトリを記憶
+setopt auto_pushd
+
 #######################################
 # エイリアス
 
@@ -159,6 +168,8 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 alias mkdir='mkdir -p'
+alias du='du -h'
+alias df='df -h'
 
 # sudo コマンドの後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
