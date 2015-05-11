@@ -181,6 +181,69 @@ alias sudo='sudo '
 alias -g L='| less'
 alias -g G='| grep'
 
+# 拡張子に応じて自動実行するエイリアス
+# http://news.mynavi.jp/column/zsh/016/
+for target in java c h C cpp txt xml log
+do
+    alias -s ${target}=zsh_pager
+done
+
+for target in html htm xhtml
+do
+    alias -s ${target}=zsh_webbrowser
+done
+
+for target in jpg jpeg png gif bmp
+do
+    alias -s ${target}=zsh_imageviewer
+done
+
+for target in mp3 m4a wav
+do
+    alias -s ${target}=zsh_audioplayer
+done
+
+for target in mpg mpeg avi mp4
+do
+    alias -s ${target}=zsh_movieplayer
+done
+
+zsh_pager()
+{
+    $(zsh_commandselector "${PAGER} less more cat") ${@+"$@"}
+}
+
+zsh_webbrowser()
+{
+    $(zsh_commandselector "open chrome firefox less") ${@+"$@"}
+}
+
+zsh_imageviewer()
+{
+    $(zsh_commandselector "open gthumb imageviewer display") ${@+"$@"}
+}
+
+zsh_audioplayer()
+{
+    $(zsh_commandselector "afplay aplay vlc totem") ${@+"$@"}
+}
+
+zsh_videoplayer()
+{
+    $(zsh_commandselector "open vlc totem") ${@+"$@"}
+}
+
+zsh_commandselector()
+{
+    for command in $(echo ${1})
+    do
+        if type "${command}" > /dev/null 2>&1 ; then
+            echo "${command}"
+            break
+        fi
+    done
+}
+
 # "C" で標準出力をクリップボードにコピーする
 # http://mollifier.hatenablog.com/entry/20100317/p1
 if which pbcopy >/dev/null 2>&1 ; then
