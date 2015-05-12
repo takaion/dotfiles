@@ -190,7 +190,7 @@ alias -g G='| grep'
 
 # 拡張子に応じて自動実行するエイリアス
 # http://news.mynavi.jp/column/zsh/016/
-for target in java c h C cpp txt xml log
+for target in java c h cpp txt xml log
 do
     alias -s ${target}=zsh_pager
 done
