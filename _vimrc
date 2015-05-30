@@ -53,3 +53,37 @@ set autoread
 set noswapfile
 set nobackup
 
+" Remapping
+nnoremap s <Nop>
+" 分割されたウィンドウを移動する
+nnoremap sh <C-w>h
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
+nnoremap sw <C-w>w
+" 現在のウィンドウを左下上右へ移動する
+nnoremap sH <C-w>H
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sL <C-w>L
+" 前後のタブへ移動する
+nnoremap sn gt
+nnoremap sp gT
+" ウィンドウの大きさを揃える
+nnoremap s= <C-w>=
+nnoremap sO <C-w>=
+" ウィンドウの幅、高さを増減させる
+nnoremap s> <C-w>>
+nnoremap s< <C-w><
+nnoremap s+ <C-w>+
+nnoremap s- <C-w>-
+" ウィンドウを最大化する
+nnoremap so <C-w>_<C-w>|
+" ウィンドウを水平・垂直に分割する
+nnoremap ss :<C-u>sp<CR>
+nnoremap sv :<C-u>vs<CR>
+" タブ・バッファを閉じる
+nnoremap sq :<C-u>q<CR>
+nnoremap sQ :<C-u>bd<CR>
+" 新規タブ
+nnoremap st :<C-u>tabnew<CR>
