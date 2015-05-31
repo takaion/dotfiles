@@ -3,9 +3,44 @@
 " ===============================================
 scriptencoding utf-8
 
-" カラースキーマの設定
-colorscheme koehler
-set nocompatible
+" General
+if has('vim_starting')
+    if &compatible
+        set nocompatible
+    endif
+    
+    if !isdirectory(expand('~/.vim/bundle/neobundle.vim/'))
+        echo "Installing NeoBundle.."
+        :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+    endif
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+call neobundle#begin(expand('~/.vim/bundle'))
+let g:neobundle_default_git_protocol='https'
+
+NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+    \     'windows' : 'make -f make_mingw32.mak',
+    \     'cygwin' : 'make -f make_cygwin.mak',
+    \     'mac' : 'make -f make_mac.mak',
+    \     'unix' : 'make -f make_unix.mak',
+    \    },
+    \ }
+NeoBundle 'Townk/vim-autoclose'
+NeoBundle 'tpope/vim-endwise', {
+  \ 'autoload' : { 'insert' : 1, } }
+
+NeoBundleCheck
+call neobundle#end()
+
+if glob(expand('~/.vim/colors/hybrid.vim'))
+    colorscheme hybrid
+else
+    colorscheme koehler
+endif
+
 syntax on
 set wildmenu
 set backupdir=$HOME/.vim/backup
