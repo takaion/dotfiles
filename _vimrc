@@ -21,8 +21,10 @@ call neobundle#begin(expand('~/.vim/bundle'))
 let g:neobundle_default_git_protocol='https'
 
 NeoBundleFetch 'Shougo/neobundle.vim'
+" Colorscheme
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'tomasr/molokai'
+" Plugins
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
     \     'windows' : 'make -f make_mingw32.mak',
@@ -35,23 +37,67 @@ NeoBundle 'Townk/vim-autoclose'
 NeoBundle 'tpope/vim-endwise', {
   \ 'autoload' : { 'insert' : 1, } }
 NeoBundle 'Shougo/unite.vim/'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'airblade/vim-gitgutter'
 
 NeoBundleCheck
 call neobundle#end()
 
+" Plugin Settings
+" vim-gitgutter
+let g:gitgutter_sign_added = "+"
+let g:gitgutter_sign_modified = "*"
+let g:gitgutter_sign_removed = "-"
+
+" lightline.vim
+let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'mode_map': {'c': 'NORMAL'},
+    \ 'active': {
+    \   'left': [
+    \     ['mode', 'paste'],
+    \     ['readonly', 'fugitive', 'gitgutter', 'filename', 'modified']
+    \   ],
+    \   'right': [
+    \     ['lineinfo', 'syntastic'],
+    \     ['percent'],
+    \     ['charcode', 'fileformat', 'fileencoding', 'filetype'],
+    \   ]
+    \ },
+    \ 'component': {
+    \   'readonly': '%{&filetype=="help"?"":&readonly?"\u2b64":""}',
+    \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+    \ },
+    \ 'component_function': {
+    \   'fugitive': 'MyFugitive'
+    \ },
+    \ 'component_visible_condition': {
+    \   'readonly': '(&filetype!="help"&& &readonly)',
+    \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))'
+    \ },
+    \ 'separator': { 'left': "\u2b80", 'right': "\u2b82" },
+    \ 'subseparator': { 'left': "\u2b81", 'right': "\u2b83" },
+    \ }
+
+function! MyFugitive()
+    if exists("*fugitive#head")
+        let _ = fugitive#head()
+        return strlen(_) ? "\u2b60 "._ : ''
+    endif
+    return ''
+endfunction
+
+" =====================================
+" Display
 syntax on
-" Default Colorscheme
 if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
     colorscheme hybrid
     highlight Normal ctermbg=none
 else
     colorscheme koehler
 endif
-
 set wildmenu
-set backupdir=$HOME/.vim/backup
-
-" Display
 set number
 set ruler
 set showcmd
@@ -59,7 +105,9 @@ set laststatus=2
 set list
 set listchars=tab:▸\ ,trail:-
 set scrolloff=4
+set noshowmode
 
+" =====================================
 " Search
 set ignorecase
 set smartcase
@@ -67,6 +115,7 @@ set wrapscan
 set hlsearch
 set history=10000
 
+" =====================================
 " Edit
 " 新しい行のインデントを現在行と同じにする
 " set autoindent
@@ -76,7 +125,10 @@ set smartindent
 set cindent
 set backspace=indent,eol,start
 set vb t_vb=
+" カーソルを行頭、行末で止まらないようにする
+set whichwrap=b,s,h,l,<,>,[,]
 
+" =====================================
 " Tab
 set tabstop=4
 set shiftwidth=4
@@ -84,16 +136,16 @@ set expandtab
 set smarttab
 set shiftround
 
-" カーソルを行頭、行末で止まらないようにする
-set whichwrap=b,s,h,l,<,>,[,]
-
+" =====================================
 " Files
+set backupdir=$HOME/.vim/backup
 set confirm
 set hidden
 set autoread
 set noswapfile
 set nobackup
 
+" =====================================
 " Remapping
 nnoremap s <Nop>
 " 分割されたウィンドウを移動する
