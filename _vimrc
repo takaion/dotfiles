@@ -8,6 +8,8 @@ if has('vim_starting')
     if &compatible
         set nocompatible
     endif
+
+    :call system("mkdir -p ~/.vim/{bundle,backup}")
     
     if !isdirectory(expand('~/.vim/bundle/neobundle.vim/'))
         echo "Installing NeoBundle.."
@@ -20,6 +22,7 @@ let g:neobundle_default_git_protocol='https'
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'tomasr/molokai'
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
     \     'windows' : 'make -f make_mingw32.mak',
@@ -31,17 +34,20 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'Townk/vim-autoclose'
 NeoBundle 'tpope/vim-endwise', {
   \ 'autoload' : { 'insert' : 1, } }
+NeoBundle 'Shougo/unite.vim/'
 
 NeoBundleCheck
 call neobundle#end()
 
-if glob(expand('~/.vim/colors/hybrid.vim'))
+syntax on
+" Default Colorscheme
+if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
     colorscheme hybrid
+    highlight Normal ctermbg=none
 else
     colorscheme koehler
 endif
 
-syntax on
 set wildmenu
 set backupdir=$HOME/.vim/backup
 
