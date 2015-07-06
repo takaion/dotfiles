@@ -33,13 +33,13 @@ NeoBundle 'Shougo/vimproc', {
     \     'unix' : 'make -f make_unix.mak',
     \    },
     \ }
-NeoBundle 'Townk/vim-autoclose'
 NeoBundle 'tpope/vim-endwise', {
   \ 'autoload' : { 'insert' : 1, } }
 NeoBundle 'Shougo/unite.vim/'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'Townk/vim-autoclose'
 
 NeoBundleCheck
 call neobundle#end()
@@ -135,6 +135,8 @@ set shiftwidth=4
 set expandtab
 set smarttab
 set shiftround
+
+au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2
 
 " =====================================
 " Files
