@@ -136,7 +136,7 @@ set expandtab
 set smarttab
 set shiftround
 
-au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
 " Files
