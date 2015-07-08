@@ -13,11 +13,11 @@
     editor = vim -c \"set fenc=utf-8\"
     excludesfile = /Users/taka/.gitignore_global
 [difftool "sourcetree"]
-    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-    path = 
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [merge]
     tool = vimdiff
     ff = false
@@ -34,13 +34,18 @@
     ad = add
     c = commit
     ci = commit -a # All modified files
-    cad = commit -m 'Add' -m ''
-    cmd = commit -m 'Modify' -m ''
-    cdl = commit -m 'Deleted' -m ''
-    ccr = commit -m 'Created' -m ''
+    cad  = commit -m 'Add' -m ''
+    cadd = commit -m 'Add' -m ''
+    cmd  = commit -m 'Modify' -m ''
+    cmod = commit -m 'Modify' -m ''
+    cdl  = commit -m 'Deleted' -m ''
+    cdel = commit -m 'Deleted' -m ''
+    ccr  = commit -m 'Created' -m ''
     ccre = commit -m 'Created' -m ''
-    cre = commit -m 'Created' -m ''
-    cam = commit -a --amend
+    cre  = commit -m 'Created' -m ''
+    cch  = commit -m 'Changed' -m ''
+    cchg = commit -m 'Changed' -m ''
+    cam  = commit -a --amend
     co = checkout
     # branch
     br = branch
