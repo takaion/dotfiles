@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/taka/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -170,8 +170,8 @@ setopt auto_pushd
 #######################################
 # エイリアス
 
-alias ll='ls -lG'
-alias la='ls -laG'
+alias ll='ls -l'
+alias la='ls -la'
 
 alias rm='rm -i'
 alias cp='cp -i'
