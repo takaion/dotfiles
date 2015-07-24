@@ -149,6 +149,10 @@ set nobackup
 
 " =====================================
 " Remapping
+" USキーボード向け設定
+nnoremap ; :
+nnoremap : ;
+
 nnoremap s <Nop>
 " 分割されたウィンドウを移動する
 nnoremap sh <C-w>h
