@@ -264,3 +264,5 @@ elif which putclip >/dev/null 2&>1 ; then
     alias -g C='| putclip'
 fi
 
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
