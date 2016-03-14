@@ -72,7 +72,7 @@ plugins=(git ruby osx bundler brew rails emoji-clock)
 
 # User configuration
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/texbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -210,6 +210,8 @@ alias sudo='sudo '
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
+
+alias vim='vim -p'
 
 # 拡張子に応じて自動実行するエイリアス
 # http://news.mynavi.jp/column/zsh/016/
