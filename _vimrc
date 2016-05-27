@@ -188,3 +188,8 @@ nnoremap sq :<C-u>q<CR>
 nnoremap sQ :<C-u>bd<CR>
 " 新規タブ
 nnoremap st :<C-u>tabnew<CR>
+
+" 中括弧+Enterの設定
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>)]}
