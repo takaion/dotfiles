@@ -137,6 +137,8 @@ set smarttab
 set shiftround
 
 au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.json set filetype=javascript
 
 " =====================================
 " Files
