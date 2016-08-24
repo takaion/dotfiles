@@ -106,6 +106,7 @@ set list
 set listchars=tab:▸\ ,trail:-
 set scrolloff=4
 set noshowmode
+set ambiwidth=double
 
 " =====================================
 " Search
@@ -138,7 +139,9 @@ set shiftround
 
 au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.yml set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json set filetype=javascript
+au BufNewFile,BufRead *.tex set filetype=tex
 
 " =====================================
 " Files
