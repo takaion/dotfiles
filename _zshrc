@@ -292,6 +292,9 @@ fi
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 
+[[ -d ~/.pyenv ]] && \
+    eval "$(pyenv init -)"
+
 [[ -d ~/.rbenv ]] && \
     export PATH=${HOME}/.rbenv/bin:${PATH} && \
     eval "$(rbenv init -)"
