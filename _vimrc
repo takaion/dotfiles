@@ -94,7 +94,7 @@ endfunction
 syntax on
 colorscheme koehler
 if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
-    colorscheme hybrid
+    colorscheme molokai
     highlight Normal ctermbg=none
 endif
 set wildmenu
