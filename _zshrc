@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+ZSHRC_LOCAL=~/dotfiles/_zshrc.local
 
 function ph() {
   local prompt_descriptions
@@ -284,7 +285,7 @@ if which pbcopy >/dev/null 2>&1 ; then
 elif which xsel >/dev/null 2>&1 ; then
     # Linux
     alias -g C='| xsel --input --clipboard'
-elif which putclip >/dev/null 2&>1 ; then
+elif which putclip >/dev/null 2>&1 ; then
     # Cygwin
     alias -g C='| putclip'
 fi
@@ -295,3 +296,7 @@ bindkey "${terminfo[kend]}" end-of-line
 [[ -d ~/.rbenv ]] && \
     export PATH=${HOME}/.rbenv/bin:${PATH} && \
     eval "$(rbenv init -)"
+
+if [[ -f $ZSHRC_LOCAL ]]; then
+    source $ZSHRC_LOCAL
+fi
