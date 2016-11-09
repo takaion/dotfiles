@@ -72,7 +72,10 @@ plugins=(git ruby osx bundler brew rails emoji-clock)
 
 # User configuration
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/texbin"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
+if [ "$(uname)" = 'Darwin' ]; then
+  export PATH="$PATH:/Library/TeX/texbin"
+fi
 # export MANPATH="/usr/local/man:$MANPATH"
 
 if [ -f $ZSH/oh-my-zsh.sh ] ; then
@@ -303,3 +306,8 @@ bindkey "^[[3~" delete-char
 [[ -d ~/.rbenv ]] && \
     export PATH=${HOME}/.rbenv/bin:${PATH} && \
     eval "$(rbenv init -)"
+
+# other settings for mac
+if [ "$(uname)" = 'Darwin' ]; then
+  alias dnscacheclear="sudo killall -HUP mDNSResponder"
+fi
