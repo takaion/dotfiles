@@ -1,4 +1,8 @@
 
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
 case "${OSTYPE}" in
 	darwin*)
 		alias ls="ls -G"

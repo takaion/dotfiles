@@ -40,6 +40,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Townk/vim-autoclose'
+NeoBundle 'sudo.vim'
 
 NeoBundleCheck
 call neobundle#end()
@@ -91,11 +92,10 @@ endfunction
 " =====================================
 " Display
 syntax on
+colorscheme koehler
 if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
-    colorscheme hybrid
+    colorscheme molokai
     highlight Normal ctermbg=none
-else
-    colorscheme koehler
 endif
 set wildmenu
 set number
