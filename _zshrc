@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+ZSHRC_LOCAL=~/dotfiles/_zshrc.local
 
 function ph() {
   local prompt_descriptions
@@ -310,4 +311,8 @@ bindkey "^[[3~" delete-char
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
+fi
+
+if [[ -f $ZSHRC_LOCAL ]]; then
+    source $ZSHRC_LOCAL
 fi
