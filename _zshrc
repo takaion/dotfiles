@@ -297,8 +297,6 @@ fi
 
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
-bindkey "^[OH" beginning-of-line
-bindkey "^[OF" end-of-line
 bindkey "^[[3~" delete-char
 
 [[ -d ~/.pyenv ]] && \
@@ -311,6 +309,13 @@ bindkey "^[[3~" delete-char
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
+  bindkey "^[OH" beginning-of-line
+  bindkey "^[OF" end-of-line
+fi
+
+if [ "$(uname)" = 'Linux' ]; then
+  bindkey "^[[H" beginning-of-line
+  bindkey "^[[F" end-of-line
 fi
 
 if [[ -f $ZSHRC_LOCAL ]]; then
