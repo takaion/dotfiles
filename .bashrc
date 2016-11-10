@@ -18,3 +18,5 @@ esac
 
 export HISTCONTROL=ignoreboth
 export HISTIGNORE="fg*:bg*:history*:cd*:ls*:ll*:la*"
+
+PS1="\u@\h: \w\$ "
