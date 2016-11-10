@@ -1,6 +1,6 @@
 #!/bin/bash
 
-filelist=(bashrc zshrc vimrc gitconfig)
+filelist=(bashrc zshrc vimrc gitconfig gitignore_global)
 
 for f in "${filelist[@]}"; do
     from="$HOME/dotfiles/.$f"
