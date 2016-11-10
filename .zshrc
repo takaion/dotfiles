@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-ZSHRC_LOCAL=~/dotfiles/_zshrc.local
+ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
 function ph() {
   local prompt_descriptions
