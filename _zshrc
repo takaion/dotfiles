@@ -136,6 +136,9 @@ setopt list_packed
 # 移動したディレクトリを記憶
 setopt auto_pushd
 
+# =以降も補完する(--prefix=/usrなど)
+setopt magic_equal_subst
+
 #######################################
 # エイリアス
 
