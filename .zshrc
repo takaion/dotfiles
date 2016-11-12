@@ -10,7 +10,17 @@ fi
 source $ZPLUG_HOME/init.zsh
 
 # zplug plugins list
-zplug "themes/wedisagree", from:oh-my-zsh
+if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
+    zplug "themes/wedisagree", from:oh-my-zsh
+    zplug "zsh-users/zsh-autosuggestions"
+    zplug "zsh-users/zsh-syntax-highlighting"
+    zplug "zsh-users/zsh-history-substring-search"
+    zplug "mrowa44/emojify"
+    zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*darwin*amd64*"
+    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+    zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+fi
+export ZPLUG_PLUGINS_DEFINED=1
 
 # install zplug plugins
 if ! zplug check --verbose; then
@@ -53,6 +63,10 @@ PROMPT='[%n@%m: %~]
 PROMPT2='[%n]%_>'
 
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+
+# additional zplug pluins settings
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 #######################################
 # 補完
