@@ -42,6 +42,7 @@
     bm = branch --merged    # Show merged branches
     bn = branch --no-merged
     # reset
+    sync = reset --hard
     r    = reset HEAD
     r1   = reset HEAD~
     r2   = reset HEAD~~
