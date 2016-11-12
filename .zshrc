@@ -16,6 +16,7 @@ source $ZPLUG_HOME/init.zsh
 
 # zplug plugins list
 if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
+    zplug "zplug/zplug"
     zplug "themes/wedisagree", from:oh-my-zsh
     zplug "zsh-users/zsh-autosuggestions"
     zplug "zsh-users/zsh-syntax-highlighting"
