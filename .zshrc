@@ -2,6 +2,11 @@
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
+if [ "$(uname)" = 'Darwin' ]; then
+  export PATH="$PATH:/Library/TeX/texbin"
+fi
+
 if [[ ! -d $ZPLUG_HOME ]]; then
     mkdir -p $ZPLUG_HOME
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
@@ -34,11 +39,6 @@ fi
 zplug load --verbose
 
 # User configuration
-
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
-if [ "$(uname)" = 'Darwin' ]; then
-  export PATH="$PATH:/Library/TeX/texbin"
-fi
 
 #######################################
 # 環境変数
