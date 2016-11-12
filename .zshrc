@@ -1,5 +1,27 @@
 # Path to your oh-my-zsh installation.
+export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
+
+if [[ ! -d $ZPLUG_HOME ]]; then
+    mkdir -p $ZPLUG_HOME
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
+
+source $ZPLUG_HOME/init.zsh
+
+# zplug plugins list
+zplug "themes/wedisagree", from:oh-my-zsh
+
+# install zplug plugins
+if ! zplug check --verbose; then
+  printf 'Install? [y/N]: '
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+# load zplug plugins
+zplug load --verbose
 
 # User configuration
 
