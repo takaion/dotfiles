@@ -1,4 +1,16 @@
-# Path to your oh-my-zsh installation.
+# .zshrc
+
+#######################################
+# 環境変数、基本設定
+export LANG=ja_JP.UTF-8
+
+# 色を使用できるようにする
+autoload -Uz colors
+colors
+
+# Vim 風キーバインドにする
+bindkey -v
+
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
@@ -7,6 +19,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
+#######################################
+# zplug
 if [[ ! -d $ZPLUG_HOME ]]; then
     mkdir -p $ZPLUG_HOME
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
@@ -21,7 +35,7 @@ if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zsh-users/zsh-autosuggestions"
     zplug "zsh-users/zsh-syntax-highlighting"
     zplug "zsh-users/zsh-history-substring-search"
-    zplug "mrowa44/emojify"
+    zplug "mrowa44/emojify", as:command
     zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*darwin*amd64*"
     zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
     zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
@@ -39,18 +53,8 @@ fi
 # load zplug plugins
 zplug load --verbose
 
-# User configuration
-
 #######################################
-# 環境変数
-export LANG=ja_JP.UTF-8
-
-# 色を使用できるようにする
-autoload -Uz colors
-colors
-
-# Vim 風キーバインドにする
-bindkey -v
+# その他個人設定
 
 # ヒストリファイルの設定
 HISTFILE=~/.zsh_history
