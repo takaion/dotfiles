@@ -1,4 +1,16 @@
-# Path to your oh-my-zsh installation.
+# .zshrc
+
+#######################################
+# 環境変数、基本設定
+export LANG=ja_JP.UTF-8
+
+# 色を使用できるようにする
+autoload -Uz colors
+colors
+
+# Vim 風キーバインドにする
+bindkey -v
+
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
@@ -7,6 +19,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
+#######################################
+# zplug
 if [[ ! -d $ZPLUG_HOME ]]; then
     mkdir -p $ZPLUG_HOME
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
@@ -39,18 +53,8 @@ fi
 # load zplug plugins
 zplug load --verbose
 
-# User configuration
-
 #######################################
-# 環境変数
-export LANG=ja_JP.UTF-8
-
-# 色を使用できるようにする
-autoload -Uz colors
-colors
-
-# Vim 風キーバインドにする
-bindkey -v
+# その他個人設定
 
 # ヒストリファイルの設定
 HISTFILE=~/.zsh_history
