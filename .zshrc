@@ -252,6 +252,8 @@ bindkey "^[[3~" delete-char
 
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
+  export CLICOLOR=1
+  export LSCOLORS=GxFxcxdxCxegedabagacad
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
   bindkey "^[OH" beginning-of-line
   bindkey "^[OF" end-of-line
