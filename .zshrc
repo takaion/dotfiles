@@ -33,7 +33,7 @@ if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zplug/zplug"
     zplug "themes/wedisagree", from:oh-my-zsh
     zplug "zsh-users/zsh-autosuggestions"
-    zplug "zsh-users/zsh-syntax-highlighting"
+    zplug "zsh-users/zsh-syntax-highlighting", nice:10
     zplug "zsh-users/zsh-history-substring-search"
     zplug "mrowa44/emojify", as:command
     zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*darwin*amd64*"
