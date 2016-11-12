@@ -1,51 +1,33 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
-function ph() {
-  local prompt_descriptions
-  prompt_descriptions=(
-    $ZSH_THEME_GIT_PROMPT_DIRTY 'dirty\tclean でない'
-    $ZSH_THEME_GIT_PROMPT_UNTRACKED 'untracked\tトラックされていないファイルがある'
-    $ZSH_THEME_GIT_PROMPT_CLEAN 'clean'
-    $ZSH_THEME_GIT_PROMPT_ADDED 'added\t追加されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_MODIFIED 'modified\t変更されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_DELETED 'deleted\t削除されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_RENAMED 'renamed\tファイル名が変更されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_UNMERGED 'unmerged\tマージされていないファイルがある'
-    $ZSH_THEME_GIT_PROMPT_AHEAD 'ahead\tmaster リポジトリよりコミットが進んでいる'
-  )
+if [[ ! -d $ZPLUG_HOME ]]; then
+    mkdir -p $ZPLUG_HOME
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
 
-  local i
-  for ((i = 1; i <= $#prompt_descriptions; i += 2))
-  do
-    local p=$prompt_descriptions[$i]
-    local d=$prompt_descriptions[$i+1]
-    echo `echo $p | sed -E 's/%.| //g'` $reset_color $d
-  done
-}
+source $ZPLUG_HOME/init.zsh
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="wedisagree"
+# zplug plugins list
+zplug "themes/wedisagree", from:oh-my-zsh
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git ruby osx bundler brew rails emoji-clock)
+# install zplug plugins
+if ! zplug check --verbose; then
+  printf 'Install? [y/N]: '
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+# load zplug plugins
+zplug load --verbose
 
 # User configuration
 
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
 if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
-fi
-
-if [ -f $ZSH/oh-my-zsh.sh ] ; then
-    source $ZSH/oh-my-zsh.sh
 fi
 
 #######################################
