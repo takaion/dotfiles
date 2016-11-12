@@ -2,29 +2,6 @@
 export ZSH=$HOME/.oh-my-zsh
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
-function ph() {
-  local prompt_descriptions
-  prompt_descriptions=(
-    $ZSH_THEME_GIT_PROMPT_DIRTY 'dirty\tclean でない'
-    $ZSH_THEME_GIT_PROMPT_UNTRACKED 'untracked\tトラックされていないファイルがある'
-    $ZSH_THEME_GIT_PROMPT_CLEAN 'clean'
-    $ZSH_THEME_GIT_PROMPT_ADDED 'added\t追加されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_MODIFIED 'modified\t変更されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_DELETED 'deleted\t削除されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_RENAMED 'renamed\tファイル名が変更されたファイルがある'
-    $ZSH_THEME_GIT_PROMPT_UNMERGED 'unmerged\tマージされていないファイルがある'
-    $ZSH_THEME_GIT_PROMPT_AHEAD 'ahead\tmaster リポジトリよりコミットが進んでいる'
-  )
-
-  local i
-  for ((i = 1; i <= $#prompt_descriptions; i += 2))
-  do
-    local p=$prompt_descriptions[$i]
-    local d=$prompt_descriptions[$i+1]
-    echo `echo $p | sed -E 's/%.| //g'` $reset_color $d
-  done
-}
-
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
