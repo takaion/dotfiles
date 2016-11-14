@@ -3,7 +3,7 @@
 filelist=(bashrc zshrc vimrc gitconfig gitignore_global)
 
 for f in "${filelist[@]}"; do
-    from="$HOME/dotfiles/.$f"
+    from="$(dirname $0)/.$f"
     to="$HOME/.$f"
     if [ -e "$to" ] ; then
         mv $to "${to}.old"
