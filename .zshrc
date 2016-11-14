@@ -33,7 +33,7 @@ if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zplug/zplug"
     zplug "themes/wedisagree", from:oh-my-zsh
     zplug "zsh-users/zsh-autosuggestions"
-    zplug "zsh-users/zsh-syntax-highlighting"
+    zplug "zsh-users/zsh-syntax-highlighting", nice:10
     zplug "zsh-users/zsh-history-substring-search"
     zplug "mrowa44/emojify", as:command
     zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*darwin*amd64*"
@@ -252,6 +252,8 @@ bindkey "^[[3~" delete-char
 
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
+  export CLICOLOR=1
+  export LSCOLORS=GxFxcxdxCxegedabagacad
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
   bindkey "^[OH" beginning-of-line
   bindkey "^[OF" end-of-line
