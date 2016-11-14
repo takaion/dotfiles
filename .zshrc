@@ -28,6 +28,18 @@ fi
 
 source $ZPLUG_HOME/init.zsh
 
+os=$OSTYPE:l
+arch=$(uname -m)
+if [[ $os = "linux-gnu" ]]; then
+    os="linux"
+fi
+if [[ $arch = "x86_64" ]]; then
+    arch="amd64"
+elif [[ $arch = "i686" ]]; then
+    arch="386"
+fi
+pattern="*${os}*${arch}*"
+
 # zplug plugins list
 if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zplug/zplug"
@@ -36,9 +48,11 @@ if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zsh-users/zsh-syntax-highlighting", nice:10
     zplug "zsh-users/zsh-history-substring-search"
     zplug "mrowa44/emojify", as:command
-    zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*darwin*amd64*"
-    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
-    zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+    if [[ "$(uname)" = "Darwin" ]]; then
+        zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
+        zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+        zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+    fi
 fi
 export ZPLUG_PLUGINS_DEFINED=1
 
