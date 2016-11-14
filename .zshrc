@@ -48,11 +48,9 @@ if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
     zplug "zsh-users/zsh-syntax-highlighting", nice:10
     zplug "zsh-users/zsh-history-substring-search"
     zplug "mrowa44/emojify", as:command
-    if [[ "$(uname)" = "Darwin" ]]; then
-        zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
-        zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
-        zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
-    fi
+    zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
+    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+    zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 fi
 export ZPLUG_PLUGINS_DEFINED=1
 
