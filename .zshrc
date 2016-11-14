@@ -14,7 +14,7 @@ bindkey -v
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/dotfiles/.zshrc.local
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
 if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
@@ -67,7 +67,6 @@ PROMPT='[%n@%m: %~]
 
 PROMPT2='[%n]%_>'
 
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
 # additional zplug pluins settings
 bindkey '^[[A' history-substring-search-up
