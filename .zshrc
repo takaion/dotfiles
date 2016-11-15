@@ -19,6 +19,10 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
+if [[ `which vim` ]]; then
+    export EDITOR=vim
+fi
+
 #######################################
 # zplug
 if [[ ! -d $ZPLUG_HOME ]]; then
