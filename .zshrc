@@ -261,9 +261,13 @@ bindkey "^[[3~" delete-char
 [[ -d ~/.pyenv ]] && \
     eval "$(pyenv init -)"
 
-[[ -d ~/.rbenv ]] && \
-    export PATH=${HOME}/.rbenv/bin:${PATH} && \
-    eval "$(rbenv init -)"
+rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
+for r in $rbenv_dir_list; do
+    [[ -d $r/bin ]] && \
+        export PATH=$r/bin:${PATH} && \
+        eval "$(rbenv init -)" && \
+        break
+done
 
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
