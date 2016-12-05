@@ -24,6 +24,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Colorscheme
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'tomasr/molokai'
+NeoBundle 'chriskempson/vim-tomorrow-theme'
 " Plugins
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
@@ -41,6 +42,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Townk/vim-autoclose'
 NeoBundle 'sudo.vim'
+NeoBundle 'vim-ruby/vim-ruby'
 
 NeoBundleCheck
 call neobundle#end()
