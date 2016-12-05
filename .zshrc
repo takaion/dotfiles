@@ -19,6 +19,10 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
+if [[ `which vim` ]]; then
+    export EDITOR=vim
+fi
+
 #######################################
 # zplug
 if [[ ! -d $ZPLUG_HOME ]]; then
@@ -154,6 +158,7 @@ setopt magic_equal_subst
 #######################################
 # エイリアス
 
+alias ls='ls --color=auto'
 alias ll='ls -l'
 alias la='ls -la'
 
@@ -257,9 +262,16 @@ bindkey "^[[3~" delete-char
 [[ -d ~/.pyenv ]] && \
     eval "$(pyenv init -)"
 
-[[ -d ~/.rbenv ]] && \
-    export PATH=${HOME}/.rbenv/bin:${PATH} && \
-    eval "$(rbenv init -)"
+rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
+for r in $rbenv_dir_list; do
+    [[ -d $r/bin ]] && \
+        export PATH=$r/bin:${PATH} && \
+        eval "$(rbenv init -)" && \
+        break
+done
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
 
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
