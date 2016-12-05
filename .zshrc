@@ -268,6 +268,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
   bindkey "^[OH" beginning-of-line
   bindkey "^[OF" end-of-line
+  bindkey "^[[H" beginning-of-line
+  bindkey "^[[F" end-of-line
 fi
 
 if [ "$(uname)" = 'Linux' ]; then
