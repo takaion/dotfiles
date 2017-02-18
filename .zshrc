@@ -34,6 +34,9 @@ source $ZPLUG_HOME/init.zsh
 
 os=$OSTYPE:l
 arch=$(uname -m)
+if [[ `uname` = "Darwin" ]]; then
+    os="darwin"
+fi
 if [[ $os = "linux-gnu" ]]; then
     os="linux"
 fi
@@ -158,7 +161,11 @@ setopt magic_equal_subst
 #######################################
 # エイリアス
 
-alias ls='ls --color=auto'
+if [ "$(uname)" = 'Darwin' ]; then
+    alias ls='ls -G'
+else
+    alias ls='ls --color=auto'
+fi
 alias ll='ls -l'
 alias la='ls -la'
 
