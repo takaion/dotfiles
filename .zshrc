@@ -70,7 +70,7 @@ if ! zplug check --verbose; then
 fi
 
 # load zplug plugins
-zplug load --verbose
+zplug load
 
 #######################################
 # その他個人設定
