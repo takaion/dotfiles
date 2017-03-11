@@ -271,8 +271,7 @@ bindkey "^[[3~" delete-char
 
 rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
 for r in $rbenv_dir_list; do
-    [[ -d $r/bin ]] && \
-        export PATH=$r/bin:${PATH} && \
+    [[ -d $r ]] && \
         eval "$(rbenv init -)" && \
         break
 done
