@@ -284,6 +284,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   export CLICOLOR=1
   export LSCOLORS=GxFxcxdxCxegedabagacad
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
+  alias restart-touchbar="killall ControlStrip && killall BetterTouchTool; \
+                          sleep 1 && open /Applications/ツール/BetterTouchTool.app"
   bindkey "^[OH" beginning-of-line
   bindkey "^[OF" end-of-line
   bindkey "^[[H" beginning-of-line
