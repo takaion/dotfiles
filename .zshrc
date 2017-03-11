@@ -299,6 +299,10 @@ if [ "$(uname)" = 'Linux' ]; then
   bindkey "^[[4~" end-of-line
 fi
 
+function mcd () {
+    mkdir -p "$1" && cd "$1"
+}
+
 if [[ -f $ZSHRC_LOCAL ]]; then
     source $ZSHRC_LOCAL
 fi
