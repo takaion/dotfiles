@@ -144,6 +144,7 @@ au BufNewFile,BufRead *.html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.yml set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json set filetype=javascript
 au BufNewFile,BufRead *.tex set filetype=tex
+au FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
 " Files
