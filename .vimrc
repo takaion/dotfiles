@@ -139,11 +139,11 @@ set expandtab
 set smarttab
 set shiftround
 
-au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.yml set expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.json set filetype=javascript
-au BufNewFile,BufRead *.tex set filetype=tex
+au BufNewFile,BufRead *.rb setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.json setlocal filetype=javascript
+au BufNewFile,BufRead *.tex setlocal filetype=tex
 au FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
