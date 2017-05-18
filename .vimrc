@@ -98,6 +98,7 @@ colorscheme koehler
 if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
     colorscheme molokai
     highlight Normal ctermbg=none
+    highlight Comment ctermfg=darkgray
 endif
 set wildmenu
 set number
