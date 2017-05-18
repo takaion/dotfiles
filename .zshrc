@@ -143,6 +143,12 @@ setopt hist_ignore_all_dups
 # スペースから始まるコマンド行はヒストリに残さない
 setopt hist_ignore_space
 
+# historyコマンドは履歴に登録しない
+setopt hist_no_store
+
+# 余分な空白は詰めて記録
+setopt hist_reduce_blanks
+
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
@@ -185,6 +191,7 @@ alias -g L='| less'
 alias -g G='| grep'
 
 alias vim='vim -p'
+alias v='vim'
 
 # 拡張子に応じて自動実行するエイリアス
 # http://news.mynavi.jp/column/zsh/016/
