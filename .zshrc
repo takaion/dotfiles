@@ -19,13 +19,13 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
-if [[ `which vim` ]]; then
+if [ `which vim` ]; then
     export EDITOR=vim
 fi
 
 #######################################
 # zplug
-if [[ ! -d $ZPLUG_HOME ]]; then
+if [ ! -d $ZPLUG_HOME ]; then
     mkdir -p $ZPLUG_HOME
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
@@ -34,21 +34,21 @@ source $ZPLUG_HOME/init.zsh
 
 os=$OSTYPE:l
 arch=$(uname -m)
-if [[ `uname` = "Darwin" ]]; then
+if [ `uname` = "Darwin" ]; then
     os="darwin"
 fi
-if [[ $os = "linux-gnu" ]]; then
+if [ $os = "linux-gnu" ]; then
     os="linux"
 fi
-if [[ $arch = "x86_64" ]]; then
+if [ $arch = "x86_64" ]; then
     arch="amd64"
-elif [[ $arch = "i686" ]]; then
+elif [ $arch = "i686" ]; then
     arch="386"
 fi
 pattern="*${os}*${arch}*"
 
 # zplug plugins list
-if [[ -z "$ZPLUG_PLUGINS_DEFINED" ]]; then
+if [ -z "$ZPLUG_PLUGINS_DEFINED" ]; then
     zplug "zplug/zplug"
     zplug "themes/wedisagree", from:oh-my-zsh
     zplug "zsh-users/zsh-autosuggestions"
@@ -273,7 +273,7 @@ bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 bindkey "^[[3~" delete-char
 
-[[ -d ~/.pyenv ]] && \
+[ -d ~/.pyenv ] && \
     eval "$(pyenv init -)"
 
 rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
@@ -314,6 +314,6 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
-if [[ -f $ZSHRC_LOCAL ]]; then
+if [ -f $ZSHRC_LOCAL ]; then
     source $ZSHRC_LOCAL
 fi
