@@ -310,6 +310,10 @@ function mcd () {
     mkdir -p "$1" && cd "$1"
 }
 
+function title () {
+    echo -ne "\033]0;$@\007"
+}
+
 if [[ -f $ZSHRC_LOCAL ]]; then
     source $ZSHRC_LOCAL
 fi
