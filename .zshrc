@@ -293,6 +293,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   alias dnscacheclear="sudo killall -HUP mDNSResponder"
   alias restart-touchbar="killall ControlStrip && killall BetterTouchTool; \
                           sleep 1 && open /Applications/ツール/BetterTouchTool.app"
+  alias chrome='open -a "/Applications/Google Chrome.app"'
+  alias code='open -a "/Applications/Visual Studio Code.app"'
   bindkey "^[OH" beginning-of-line
   bindkey "^[OF" end-of-line
   bindkey "^[[H" beginning-of-line
