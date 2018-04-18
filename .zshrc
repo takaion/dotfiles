@@ -273,6 +273,11 @@ bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 bindkey "^[[3~" delete-char
 
+if [ -d $HOME/.anyenv ] ; then
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+fi
+
 [ -d ~/.pyenv ] && \
     eval "$(pyenv init -)"
 
