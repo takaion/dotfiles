@@ -48,18 +48,15 @@ fi
 pattern="*${os}*${arch}*"
 
 # zplug plugins list
-if [ -z "$ZPLUG_PLUGINS_DEFINED" ]; then
-    zplug "zplug/zplug"
-    zplug "themes/wedisagree", from:oh-my-zsh
-    zplug "zsh-users/zsh-autosuggestions"
-    zplug "zsh-users/zsh-syntax-highlighting", defer:2
-    zplug "zsh-users/zsh-history-substring-search"
-    zplug "mrowa44/emojify", as:command
-    zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
-    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
-    zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
-fi
-export ZPLUG_PLUGINS_DEFINED=1
+zplug "zplug/zplug"
+zplug "themes/wedisagree", from:oh-my-zsh
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-history-substring-search"
+zplug "mrowa44/emojify", as:command
+zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
+zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 
 # install zplug plugins
 if ! zplug check --verbose; then
