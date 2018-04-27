@@ -111,6 +111,10 @@ set scrolloff=4
 set noshowmode
 set ambiwidth=double
 
+if &term == "screen"
+    set t_Co=256
+endif
+
 " =====================================
 " Search
 set ignorecase
