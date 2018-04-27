@@ -14,7 +14,7 @@ colors
 bindkey -v
 
 export ZPLUG_HOME=$HOME/.zsh/zplug
-ZSHRC_LOCAL=~/dotfiles/.zshrc.local
+ZSHRC_LOCAL=~/.zshrc.local
 
 export PATH="$HOME/bin:$HOME/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 if [ "$(uname)" = 'Darwin' ]; then
