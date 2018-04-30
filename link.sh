@@ -1,6 +1,6 @@
 #!/bin/bash
 
-filelist=(bashrc zshrc vimrc gitconfig gitignore_global)
+filelist=(bashrc zshrc vimrc gitconfig gitignore_global tmux.conf)
 
 for f in "${filelist[@]}"; do
     from="$(dirname $0)/.$f"
