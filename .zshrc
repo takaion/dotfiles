@@ -298,7 +298,7 @@ for r in $rbenv_dir_list; do
         eval "$(rbenv init -)" && \
         break
 done
-if which ruby >/dev/null && which gem >/dev/null; then
+if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
     PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
