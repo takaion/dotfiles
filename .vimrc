@@ -150,6 +150,7 @@ au BufNewFile,BufRead *.html setlocal expandtab tabstop=2 shiftwidth=2 softtabst
 au BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json setlocal filetype=javascript
 au BufNewFile,BufRead *.tex setlocal filetype=tex
+au BufNewFile,BufRead *.md setlocal filetype=markdown
 au FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
