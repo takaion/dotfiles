@@ -22,7 +22,7 @@ autoload -Uz colors
 colors
 
 # Vim 風キーバインドにする
-bindkey -v
+#bindkey -v
 
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/.zshrc.local
@@ -45,19 +45,25 @@ fi
 
 source $ZPLUG_HOME/init.zsh
 
-os=$OSTYPE:l
-arch=$(uname -m)
-if [ `uname` = "Darwin" ]; then
-    os="darwin"
-fi
-if [ $os = "linux-gnu" ]; then
-    os="linux"
-fi
-if [ $arch = "x86_64" ]; then
-    arch="amd64"
-elif [ $arch = "i686" ]; then
-    arch="386"
-fi
+case ${OSTYPE} in
+    darwin*)
+        os="darwin"
+        ;;
+    linux*)
+        os="linux"
+esac
+
+case $(uname -m) in
+    x86_64)
+        arch="amd64"
+        ;;
+    i686)
+        arch="386"
+        ;;
+    armv7l)
+        arch="arm7"
+        ;;
+esac
 pattern="*${os}*${arch}*"
 
 # zplug plugins list
@@ -109,7 +115,7 @@ compinit
 # 大小関係なく補完
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# ../ の後は今いるディレクトリを保管しない
+# ../ の後は今いるディレクトリを補完しない
 zstyle ':completion:*' ignore-parents parent pwd ..
 
 # sudo コマンドの後ろでコマンド名を補完する
@@ -172,6 +178,13 @@ setopt auto_pushd
 
 # =以降も補完する(--prefix=/usrなど)
 setopt magic_equal_subst
+
+#######################################
+# その他設定
+
+# 入力候補でも色をつける
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 #######################################
 # エイリアス
@@ -298,7 +311,7 @@ for r in $rbenv_dir_list; do
         eval "$(rbenv init -)" && \
         break
 done
-if which ruby >/dev/null && which gem >/dev/null; then
+if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
     PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
