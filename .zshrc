@@ -387,6 +387,10 @@ function date-with-status-color {
 setopt prompt_subst
 RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
+if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" -a -z "$SSH_AGENT_PID" ] ; then
+    eval `ssh-agent`
+fi
+
 # Load local zshrc
 if [ -f $ZSHRC_LOCAL ]; then
     source $ZSHRC_LOCAL
