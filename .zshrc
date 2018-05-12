@@ -391,6 +391,15 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" -a -z "$SSH_AGENT_PID" ] ; 
     eval `ssh-agent`
 fi
 
+if [ -x "`which screenfetch 2>/dev/null`" ] ; then
+    screenfetch
+fi
+
+LOCAL_MOTD=$HOME/.motd
+if [ -f $LOCAL_MOTD ] ; then
+    cat $LOCAL_MOTD
+fi
+
 # Load local zshrc
 if [ -f $ZSHRC_LOCAL ]; then
     source $ZSHRC_LOCAL
