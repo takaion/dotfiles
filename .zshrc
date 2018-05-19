@@ -14,9 +14,9 @@ alias lang-en="chlng en_US.UTF-8"
 alias lang-ja="chlng ja_JP.UTF-8"
 
 if [ "$TERM" = "linux" ] ; then
-    lang-en
+    lang-en >/dev/null
 else
-    lang-ja
+    lang-ja >/dev/null
 fi
 
 # 色を使用できるようにする
