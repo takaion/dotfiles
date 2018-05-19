@@ -2,10 +2,6 @@
 
 #######################################
 # 環境変数、基本設定
-export LANG=ja_JP.UTF-8
-export LANGUAGE=ja_JP.UTF-8
-export LC_ALL=ja_JP.UTF-8
-
 function chlng {
     NEW_LANG=${1:-C}
     export LANG=$NEW_LANG
@@ -16,6 +12,12 @@ function chlng {
 
 alias lang-en="chlng en_US.UTF-8"
 alias lang-ja="chlng ja_JP.UTF-8"
+
+if [ "$TERM" = "linux" ] ; then
+    lang-en
+else
+    lang-ja
+fi
 
 # 色を使用できるようにする
 autoload -Uz colors
