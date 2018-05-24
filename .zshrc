@@ -389,8 +389,21 @@ function date-with-status-color {
 setopt prompt_subst
 RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
-if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" -a -z "$SSH_AGENT_PID" ] ; then
-    eval `ssh-agent`
+SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
+if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
+    if [ -S "$SSH_AUTH_SOCK" ] ; then
+        case $SSH_AUTH_SOCK in
+            /tmp/*/agent.[0-9]*)
+                  ln -sf "SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+                  ;;
+        esac
+    elif [ -S "$SSH_AGENT_SOCK" ] ; then
+        export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    else
+        eval `ssh-agent` && \
+            ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
+            export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    fi
 fi
 
 if [ -x "`which screenfetch 2>/dev/null`" ] ; then
