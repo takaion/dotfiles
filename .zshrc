@@ -317,6 +317,16 @@ if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
     PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
+function ssh {
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ] ; then
+        tmux rename-window ${@: -1}
+        command ssh "$@"
+        tmux set-window-option automatic-rename "on" >/dev/null
+    else
+        command ssh "$@"
+    fi
+}
+
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
   export CLICOLOR=1
