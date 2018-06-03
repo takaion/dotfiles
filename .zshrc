@@ -362,7 +362,8 @@ function title () {
 function rprompt-git-current-branch {
     local branch_name st branch_status
 
-    if [ ! -e  ".git" ]; then
+    git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
+    if [ "$?" != 0 ]; then
         # gitで管理されていないディレクトリは何も返さない
         return
     fi
