@@ -401,6 +401,7 @@ setopt prompt_subst
 RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
 SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
+SSH_DEFAULT_IDENT="$HOME/.ssh/id_rsa"
 if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
     if [ -S "$SSH_AUTH_SOCK" ] ; then
         case $SSH_AUTH_SOCK in
@@ -414,6 +415,9 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
         eval `ssh-agent` && \
             ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
             export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    fi
+    if [ -f "$SSH_DEFAULT_IDENT" -a -n $(ssh-add -l 2>&1 | grep 'no identities') ] ; then
+        ssh-add "$SSH_DEFAULT_IDENT"
     fi
 fi
 
