@@ -416,7 +416,7 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
             ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
             export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
     fi
-    if [ -f "$SSH_DEFAULT_IDENT" -a -n $(ssh-add -l 2>&1 | grep 'no identities') ] ; then
+    if [ -f "$SSH_DEFAULT_IDENT" -a $(ssh-add -l 2>&1 | grep 'no identities'; echo $?) = 0 ] ; then
         ssh-add "$SSH_DEFAULT_IDENT"
     fi
 fi
