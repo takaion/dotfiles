@@ -73,8 +73,12 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-history-substring-search"
 zplug "mrowa44/emojify", as:command
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
-zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+case $(uname -m) in
+    x86_64|i686)
+        zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+        ;;
+esac
 
 # install zplug plugins
 if ! zplug check --verbose; then
