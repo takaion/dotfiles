@@ -79,8 +79,8 @@ let g:lightline = {
     \   'readonly': '(&filetype!="help"&& &readonly)',
     \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))'
     \ },
-    \ 'separator': { 'left': "\u2b80", 'right': "\u2b82" },
-    \ 'subseparator': { 'left': "\u2b81", 'right': "\u2b83" },
+    \ 'separator': { 'left': "", 'right': "" },
+    \ 'subseparator': { 'left': "", 'right': "" },
     \ }
 
 function! MyFugitive()
