@@ -32,7 +32,7 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
-if [ `which vim` ]; then
+if [ `which vim 2>/dev/null` ]; then
     export EDITOR=vim
 fi
 
