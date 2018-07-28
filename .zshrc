@@ -398,7 +398,7 @@ function rprompt-git-current-branch {
         branch_status="%F{blue}"
     fi
     # ブランチ名を色付きで表示する
-    echo "${branch_status}[$branch_name]"
+    echo "${branch_status}[$branch_name]%{${reset_color}%}"
 }
 
 function date-with-status-color {
