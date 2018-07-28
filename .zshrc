@@ -77,6 +77,7 @@ zplug "mrowa44/emojify", as:command
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
 zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+zplug "docker/compose", use:contrib/completion/zsh
 
 # install zplug plugins
 if ! zplug check --verbose; then
