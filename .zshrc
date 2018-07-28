@@ -358,6 +358,13 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
+# Args: src dst
+function replace_with_symlink () {
+    rsync -av --sparse --progress $1 $2 && \
+        rm -f $1 && \
+        ln -s $2 $1
+}
+
 # Show Git repository status
 # https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
 function rprompt-git-current-branch {
