@@ -405,7 +405,8 @@ setopt prompt_subst
 RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
 SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
-SSH_DEFAULT_IDENT="$HOME/.ssh/id_rsa"
+SSH_DEFAULT_PREFIX="$HOME/.ssh/id_"
+SSH_DEFAULT_LIST=(ed25519 ecdsa rsa)
 if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
     if [ -S "$SSH_AUTH_SOCK" ] ; then
         case $SSH_AUTH_SOCK in
@@ -420,9 +421,23 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
             ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
             export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
     fi
-    if [ -f "$SSH_DEFAULT_IDENT" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
-        ssh-add "$SSH_DEFAULT_IDENT"
-    fi
+    # Kill unused ssh-agent process
+    ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
+    ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
+    for proc in $(ps aux | grep -E "(ssh)-agent" | awk '{print $2}')
+    do
+        if [ ! $ssh_agent_pid = $proc ]; then
+            kill $proc
+            echo "Killed PID $proc (unused ssh-agent)"
+        fi
+    done
+    for ssh_type in $SSH_DEFAULT_LIST
+    do
+        ident_file=$SSH_DEFAULT_PREFIX$ssh_type
+        if [ -f "$ident_file" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
+            ssh-add "$ident_file"
+        fi
+    done
 fi
 
 if [ -x "`which screenfetch 2>/dev/null`" ] ; then
