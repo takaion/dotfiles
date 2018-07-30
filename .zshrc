@@ -421,6 +421,16 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
             ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
             export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
     fi
+    # Kill unused ssh-agent process
+    ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
+    ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
+    for proc in $(ps aux | grep -E "(ssh)-agent" | awk '{print $2}')
+    do
+        if [ ! $ssh_agent_pid = $proc ]; then
+            kill $proc
+            echo "Killed PID $proc (unused ssh-agent)"
+        fi
+    done
     for ssh_type in $SSH_DEFAULT_LIST
     do
         ident_file=$SSH_DEFAULT_PREFIX$ssh_type
