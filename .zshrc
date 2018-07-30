@@ -34,7 +34,7 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
-if [ `which vim` ]; then
+if [ `which vim 2>/dev/null` ]; then
     export EDITOR=vim
 fi
 
@@ -76,6 +76,7 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "mrowa44/emojify", as:command
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+zplug "docker/compose", use:contrib/completion/zsh
 case $(uname -m) in
     x86_64|i686)
         zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
@@ -361,6 +362,13 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
+# Args: src dst
+function replace_with_symlink () {
+    rsync -av --sparse --progress $1 $2 && \
+        rm -f $1 && \
+        ln -s $2 $1
+}
+
 # Show Git repository status
 # https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
 function rprompt-git-current-branch {
@@ -394,7 +402,7 @@ function rprompt-git-current-branch {
         branch_status="%F{blue}"
     fi
     # ブランチ名を色付きで表示する
-    echo "${branch_status}[$branch_name]"
+    echo "${branch_status}[$branch_name]%{${reset_color}%}"
 }
 
 function date-with-status-color {
