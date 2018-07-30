@@ -2,10 +2,6 @@
 
 #######################################
 # 環境変数、基本設定
-export LANG=ja_JP.UTF-8
-export LANGUAGE=ja_JP.UTF-8
-export LC_ALL=ja_JP.UTF-8
-
 function chlng {
     NEW_LANG=${1:-C}
     export LANG=$NEW_LANG
@@ -16,6 +12,12 @@ function chlng {
 
 alias lang-en="chlng en_US.UTF-8"
 alias lang-ja="chlng ja_JP.UTF-8"
+
+if [ "$TERM" = "linux" ] ; then
+    lang-en >/dev/null
+else
+    lang-ja >/dev/null
+fi
 
 # 色を使用できるようにする
 autoload -Uz colors
@@ -73,8 +75,13 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-history-substring-search"
 zplug "mrowa44/emojify", as:command
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
-zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+zplug "docker/compose", use:contrib/completion/zsh
+case $(uname -m) in
+    x86_64|i686)
+        zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+        ;;
+esac
 
 # install zplug plugins
 if ! zplug check --verbose; then
@@ -315,6 +322,16 @@ if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
     PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
+function ssh {
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ] ; then
+        tmux rename-window ${@: -1}
+        command ssh "$@"
+        tmux set-window-option automatic-rename "on" >/dev/null
+    else
+        command ssh "$@"
+    fi
+}
+
 # other settings for mac
 if [ "$(uname)" = 'Darwin' ]; then
   export CLICOLOR=1
@@ -345,12 +362,20 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
+# Args: src dst
+function replace_with_symlink () {
+    rsync -av --sparse --progress $1 $2 && \
+        rm -f $1 && \
+        ln -s $2 $1
+}
+
 # Show Git repository status
 # https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
 function rprompt-git-current-branch {
     local branch_name st branch_status
 
-    if [ ! -e  ".git" ]; then
+    git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
+    if [ "$?" != 0 ]; then
         # gitで管理されていないディレクトリは何も返さない
         return
     fi
@@ -377,7 +402,7 @@ function rprompt-git-current-branch {
         branch_status="%F{blue}"
     fi
     # ブランチ名を色付きで表示する
-    echo "${branch_status}[$branch_name]"
+    echo "${branch_status}[$branch_name]%{${reset_color}%}"
 }
 
 function date-with-status-color {
@@ -387,8 +412,34 @@ function date-with-status-color {
 setopt prompt_subst
 RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
-if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" -a -z "$SSH_AGENT_PID" ] ; then
-    eval `ssh-agent`
+SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
+SSH_DEFAULT_IDENT="$HOME/.ssh/id_rsa"
+if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
+    if [ -S "$SSH_AUTH_SOCK" ] ; then
+        case $SSH_AUTH_SOCK in
+            /tmp/*/agent.[0-9]*)
+                  ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+                  ;;
+        esac
+    elif [ -S "$SSH_AGENT_SOCK" ] ; then
+        export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    else
+        eval `ssh-agent` && \
+            ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
+            export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    fi
+    if [ -f "$SSH_DEFAULT_IDENT" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
+        ssh-add "$SSH_DEFAULT_IDENT"
+    fi
+fi
+
+if [ -x "`which screenfetch 2>/dev/null`" ] ; then
+    screenfetch
+fi
+
+LOCAL_MOTD=$HOME/.motd
+if [ -f $LOCAL_MOTD ] ; then
+    cat $LOCAL_MOTD
 fi
 
 # Load local zshrc
