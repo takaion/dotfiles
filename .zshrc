@@ -362,6 +362,44 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
+# Control zsh history
+# If the function returns 0, the command will be added to the history file.
+# Otherwise, the command will not be added.
+# ref: http://mollifier.hatenablog.com/entry/20090728/p1
+# ref: http://someneat.hatenablog.jp/entry/2017/07/25/073428
+__record_command() {
+    typeset -g _LASTCMD=${1%%$'\n'}
+    return 1
+}
+zshaddhistory_functions+=(__record_command)
+
+__update_history() {
+    local last_status="$?"
+
+    # hist_ignore_space
+    if [[ ! -n ${_LASTCMD%% *} ]]; then
+        return
+    fi
+
+    # hist_reduce_blanks
+    local cmd_reduce_blanks=$(echo ${_LASTCMD} | tr -s ' ')
+
+    # ignore commands
+    local line=${_LASTCMD%%$'\n'}
+    local cmd=${line%% *}
+
+    # 以下の条件をすべて満たすものだけをヒストリに追加する
+    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
+        return
+    fi
+
+    # Record the commands that have succeeded
+    if [[ ${last_status} == 0 ]]; then
+        print -sr -- "${cmd_reduce_blanks}"
+    fi
+}
+precmd_functions+=(__update_history)
+
 # Args: src dst
 function replace_with_symlink () {
     rsync -av --sparse --progress $1 $2 && \
