@@ -112,6 +112,8 @@ PROMPT2='[%n]%_>'
 # additional zplug pluins settings
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 
 #######################################
 # 補完
