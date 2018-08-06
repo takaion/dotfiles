@@ -362,6 +362,11 @@ function title () {
     echo -ne "\033]0;$@\007"
 }
 
+function github_keys () {
+    # for GNU/BSD grep
+    curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep '"key"' | awk '{print $2" "$3}' | tr -d '"'
+}
+
 # Control zsh history
 # If the function returns 0, the command will be added to the history file.
 # Otherwise, the command will not be added.
@@ -389,7 +394,7 @@ __update_history() {
     local cmd=${line%% *}
 
     # 以下の条件をすべて満たすものだけをヒストリに追加する
-    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
+    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
         return
     fi
 
