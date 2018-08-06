@@ -366,7 +366,7 @@ function title () {
 
 function github_keys () {
     # for GNU/BSD grep
-    curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep '"key"' | awk '{print $2" "$3}' | tr -d '"'
+    curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
 }
 
 # Control zsh history
