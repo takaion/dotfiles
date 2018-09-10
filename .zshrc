@@ -477,11 +477,13 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
     # Kill unused ssh-agent process
     ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
     ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
-    for proc in $(ps aux | grep -E "(ssh)-agent" | awk '{print $2}')
+    for agent in "$(ps aux | grep -E '(ssh)-agent' | awk '{ print $1" "$2 }')"
     do
-        if [ ! $ssh_agent_pid = $proc ]; then
-            kill $proc
-            echo "Killed PID $proc (unused ssh-agent)"
+        user=$(echo "$agent" | awk '{ print $1 }')
+        pid=$(echo "$agent" | awk '{ print $2 }')
+        if [ $USER = $user -a $ssh_agent_pid != $pid ] ; then
+            kill $pid
+            echo "Killed PID $pid (unused ssh-agent)"
         fi
     done
     for ssh_type in $SSH_DEFAULT_LIST
