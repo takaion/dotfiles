@@ -222,6 +222,8 @@ alias -g G='| grep'
 alias vim='vim -p'
 alias v='vim'
 
+alias rsync-ssh='rsync -av -e ssh --progress --partial --append'
+
 # 拡張子に応じて自動実行するエイリアス
 # http://news.mynavi.jp/column/zsh/016/
 for target in java c h cpp txt xml log
@@ -361,6 +363,12 @@ function mcd () {
 function title () {
     echo -ne "\033]0;$@\007"
 }
+
+if [ -x "$(which pip 2>/dev/null)" ]; then
+    function pip-update () {
+        pip list --outdated --format=columns | tail -n+3 | awk '{print $1}' | xargs pip install -U pip
+    }
+fi
 
 # Control zsh history
 # If the function returns 0, the command will be added to the history file.
