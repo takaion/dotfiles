@@ -152,6 +152,7 @@ set shiftround
 
 au BufNewFile,BufRead *.rb setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufRead *.js setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json setlocal filetype=javascript
 au BufNewFile,BufRead *.tex setlocal filetype=tex
