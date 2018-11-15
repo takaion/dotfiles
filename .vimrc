@@ -42,7 +42,13 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Townk/vim-autoclose'
 NeoBundle 'sudo.vim'
+
+" Languages
 NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'othree/yajs.vim'
+NeoBundle 'maxmellon/vim-jsx-pretty'
+NeoBundle 'othree/javascript-libraries-syntax.vim'
+NeoBundle 'othree/es.next.syntax.vim'
 
 NeoBundleCheck
 call neobundle#end()
