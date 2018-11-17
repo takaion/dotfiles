@@ -136,7 +136,6 @@ set history=10000
 set showmatch
 set autoindent
 set smartindent
-set cindent
 set backspace=indent,eol,start
 set vb t_vb=
 " カーソルを行頭、行末で止まらないようにする
@@ -150,14 +149,11 @@ set expandtab
 set smarttab
 set shiftround
 
-au BufNewFile,BufRead *.rb setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.js setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json setlocal filetype=javascript
 au BufNewFile,BufRead *.tex setlocal filetype=tex
 au BufNewFile,BufRead *.md setlocal filetype=markdown
-au FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au FileType c,cpp setlocal cindent
+au FileType sh,ruby,yaml,html,javascript,css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
 " Files
