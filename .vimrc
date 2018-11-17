@@ -10,7 +10,7 @@ if has('vim_starting')
     endif
 
     :call system("mkdir -p ~/.vim/{bundle,backup}")
-    
+
     if !isdirectory(expand('~/.vim/bundle/neobundle.vim/'))
         echo "Installing NeoBundle.."
         :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
@@ -136,7 +136,6 @@ set history=10000
 set showmatch
 set autoindent
 set smartindent
-set cindent
 set backspace=indent,eol,start
 set vb t_vb=
 " カーソルを行頭、行末で止まらないようにする
@@ -150,14 +149,11 @@ set expandtab
 set smarttab
 set shiftround
 
-au BufNewFile,BufRead *.rb setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.js setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-au BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 au BufNewFile,BufRead *.json setlocal filetype=javascript
 au BufNewFile,BufRead *.tex setlocal filetype=tex
 au BufNewFile,BufRead *.md setlocal filetype=markdown
-au FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au FileType c,cpp setlocal cindent
+au FileType sh,ruby,yaml,html,javascript,css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
 " Files
@@ -211,4 +207,4 @@ nnoremap st :<C-u>tabnew<CR>
 " 中括弧+Enterの設定
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap (<Enter> ()<Left><CR><ESC><S-o>)]}
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
