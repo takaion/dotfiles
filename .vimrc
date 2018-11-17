@@ -10,7 +10,7 @@ if has('vim_starting')
     endif
 
     :call system("mkdir -p ~/.vim/{bundle,backup}")
-    
+
     if !isdirectory(expand('~/.vim/bundle/neobundle.vim/'))
         echo "Installing NeoBundle.."
         :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
@@ -211,4 +211,4 @@ nnoremap st :<C-u>tabnew<CR>
 " 中括弧+Enterの設定
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap (<Enter> ()<Left><CR><ESC><S-o>)]}
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
