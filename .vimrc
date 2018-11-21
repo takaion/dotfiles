@@ -135,7 +135,6 @@ set history=10000
 " set autoindent
 set showmatch
 set autoindent
-set smartindent
 set backspace=indent,eol,start
 set vb t_vb=
 " カーソルを行頭、行末で止まらないようにする
