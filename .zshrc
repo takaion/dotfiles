@@ -489,7 +489,7 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
     do
         user=$(echo "$agent" | awk '{ print $1 }')
         pid=$(echo "$agent" | awk '{ print $2 }')
-        if [ $USER = $user -a $ssh_agent_pid != $pid ] ; then
+        if [ "$USER" = "$user" -a "$ssh_agent_pid" != "$pid" ] ; then
             kill $pid
             echo "Killed PID $pid (unused ssh-agent)"
         fi
