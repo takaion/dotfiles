@@ -213,6 +213,7 @@ alias mv='mv -i'
 alias mkdir='mkdir -p'
 alias du='du -h'
 alias df='df -h'
+alias grep='grep --color=auto'
 
 # sudo コマンドの後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
