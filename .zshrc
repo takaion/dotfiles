@@ -333,9 +333,9 @@ if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
 fi
 
 # Linuxbrew initialization
-if [ -d "~/.linuxbrew" ] ; then
+if [ -d ~/.linuxbrew ] ; then
     eval $(~/.linuxbrew/bin/brew shellenv)
-elif [ -d "/home/linuxbrew/.linuxbrew" ] ; then
+elif [ -d /home/linuxbrew/.linuxbrew ] ; then
     eval eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
