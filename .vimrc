@@ -152,7 +152,7 @@ au BufNewFile,BufRead *.json setlocal filetype=javascript
 au BufNewFile,BufRead *.tex setlocal filetype=tex
 au BufNewFile,BufRead *.md setlocal filetype=markdown
 au FileType c,cpp setlocal cindent
-au FileType sh,ruby,yaml,html,javascript,css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au FileType sh,ruby,yaml,html,htmldjango,javascript,css setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " =====================================
 " Files
