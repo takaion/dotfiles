@@ -384,6 +384,14 @@ function github_keys () {
     curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
 }
 
+# tmux shortcut from https://www.ebiebievidence.com/posts/tmux-ls-attach-new-alias/
+t () {
+    tmux attach -t $1 2> /dev/null || tmux new -s $1 2> /dev/null || tmux ls
+}
+
+_t() { _values 'sessions' "${(@f)$(tmux ls -F '#S' 2>/dev/null )}" }
+compdef _t t
+
 if [ -x "$(which pip 2>/dev/null)" ]; then
     function pip-update () {
         pip list --outdated --format=columns | tail -n+3 | awk '{print $1}' | xargs pip install -U pip
