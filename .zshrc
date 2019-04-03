@@ -429,10 +429,7 @@ __update_history() {
         return
     fi
 
-    # Record the commands that have succeeded
-    if [[ ${last_status} == 0 ]]; then
-        print -sr -- "${cmd_reduce_blanks}"
-    fi
+    print -sr -- "${cmd_reduce_blanks}"
 }
 precmd_functions+=(__update_history)
 
