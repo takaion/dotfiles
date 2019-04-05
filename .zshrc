@@ -103,9 +103,17 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 
 # プロンプト
-PROMPT='[%n@%m: %~]
+function colored-prompt () {
+    PROMPT='[%F{010}%n@%m%f: %F{006}%~%f]
 %(!,#,$) '
+}
 
+function non-colored-prompt () {
+    PROMPT='[%n@%m: %~]
+%(!,#,$) '
+}
+
+colored-prompt
 PROMPT2='[%n]%_>'
 
 
@@ -382,6 +390,15 @@ function title () {
 function github_keys () {
     # for GNU/BSD grep
     curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
+}
+
+function color_test () {
+    for c in {000..255}
+    do
+        echo -n "\e[38;5;${c}m $c"
+        [ $(($c%16)) -eq 15 ] && echo
+    done
+    echo
 }
 
 # tmux shortcut from https://www.ebiebievidence.com/posts/tmux-ls-attach-new-alias/
