@@ -1,5 +1,14 @@
 # .zshrc
 
+# この.zshrcで扱う変数
+ZSHRC_LOCAL=~/.zshrc.local
+LOCAL_MOTD=$HOME/.motd
+# SSH_AGENT_SOCK: SSH_AUTH_SOCKをここで指定したファイル名に固定する
+SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
+# SSH_DEFAULT_{PREFIX,LIST}: SSH Agentに鍵が1つもない場合探すファイルのプレフィックスとファイル名リスト
+SSH_DEFAULT_PREFIX="$HOME/.ssh/id_"
+SSH_DEFAULT_LIST=(ed25519 ecdsa rsa)
+
 #######################################
 # 環境変数、基本設定
 function chlng {
@@ -23,11 +32,7 @@ fi
 autoload -Uz colors
 colors
 
-# Vim 風キーバインドにする
-#bindkey -v
-
 export ZPLUG_HOME=$HOME/.zsh/zplug
-ZSHRC_LOCAL=~/.zshrc.local
 
 export PATH="$HOME/bin:$HOME/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 if [ "$(uname)" = 'Darwin' ]; then
@@ -116,6 +121,48 @@ function non-colored-prompt () {
 colored-prompt
 PROMPT2='[%n]%_>'
 
+# Show Git repository status
+# https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
+function rprompt-git-current-branch {
+    local branch_name st branch_status
+
+    git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
+    if [ "$?" != 0 ]; then
+        # gitで管理されていないディレクトリは何も返さない
+        return
+    fi
+    branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
+    st=`git status 2> /dev/null`
+    if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+        # 全てcommitされてクリーンな状態
+        branch_status="%F{green}"
+    elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
+        # gitに管理されていないファイルがある状態
+        branch_status="%F{red}?"
+    elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
+        # git addされていないファイルがある状態
+        branch_status="%F{red}+"
+    elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
+        # git commitされていないファイルがある状態
+        branch_status="%F{yellow}!"
+    elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
+        # コンフリクトが起こった状態
+        echo "%F{red}!(no branch)"
+        return
+    else
+        # 上記以外の状態の場合は青色で表示させる
+        branch_status="%F{blue}"
+    fi
+    # ブランチ名を色付きで表示する
+    echo "${branch_status}[$branch_name]%{${reset_color}%}"
+}
+
+function date-with-status-color {
+    echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"`date +%T`"%{${reset_color}%}"
+}
+
+setopt prompt_subst
+RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
 
 # additional zplug pluins settings
 bindkey '^[[A' history-substring-search-up
@@ -147,6 +194,28 @@ zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
+
+# Completion function for sudo.vim (e.g. vim sudo:/path/to/file)
+# ref: https://www.yuuan.net/item/736
+function _vimsudo {
+    local LAST="${words[$#words[*]]}"
+    case "${LAST}" in
+        sudo:*)
+            local BASEDIR="${LAST##sudo:}"
+            BASEDIR="${~BASEDIR}"
+            [ -d "${BASEDIR}" ] && BASEDIR="${BASEDIR%%/}/"
+            compadd -P 'sudo:' -f $(print ${BASEDIR}*) \
+            && return 0
+            ;;
+        *)
+            _vim && return 0
+            ;;
+        esac
+
+    return 1
+}
+
+compdef _vimsudo vim
 
 #######################################
 # オプション
@@ -262,33 +331,27 @@ do
     alias -s ${target}=zsh_movieplayer
 done
 
-zsh_pager()
-{
+zsh_pager() {
     $(zsh_commandselector "${PAGER} less more cat") ${@+"$@"}
 }
 
-zsh_webbrowser()
-{
+zsh_webbrowser() {
     $(zsh_commandselector "open chrome firefox less") ${@+"$@"}
 }
 
-zsh_imageviewer()
-{
+zsh_imageviewer() {
     $(zsh_commandselector "open gthumb imageviewer display") ${@+"$@"}
 }
 
-zsh_audioplayer()
-{
+zsh_audioplayer() {
     $(zsh_commandselector "afplay aplay vlc totem") ${@+"$@"}
 }
 
-zsh_videoplayer()
-{
+zsh_videoplayer() {
     $(zsh_commandselector "open vlc totem") ${@+"$@"}
 }
 
-zsh_commandselector()
-{
+zsh_commandselector() {
     for command in $(echo ${1})
     do
         if type "${command}" > /dev/null 2>&1 ; then
@@ -379,6 +442,82 @@ if [ "$(uname)" = 'Linux' ]; then
   bindkey "^[[4~" end-of-line
 fi
 
+# Control zsh history
+# If the function returns 0, the command will be added to the history file.
+# Otherwise, the command will not be added.
+# ref: http://mollifier.hatenablog.com/entry/20090728/p1
+# ref: http://someneat.hatenablog.jp/entry/2017/07/25/073428
+__record_command() {
+    typeset -g _LASTCMD=${1%%$'\n'}
+    return 1
+}
+zshaddhistory_functions+=(__record_command)
+
+__update_history() {
+    local last_status="$?"
+
+    # hist_ignore_space
+    if [[ ! -n ${_LASTCMD%% *} ]]; then
+        return
+    fi
+
+    # hist_reduce_blanks
+    local cmd_reduce_blanks=$(echo ${_LASTCMD} | tr -s ' ')
+
+    # ignore commands
+    local line=${_LASTCMD%%$'\n'}
+    local cmd=${line%% *}
+
+    # 以下の条件をすべて満たすものだけをヒストリに追加する
+    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
+        return
+    fi
+
+    print -sr -- "${cmd_reduce_blanks}"
+}
+precmd_functions+=(__update_history)
+
+# SSH Agent
+if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
+    if [ -S "$SSH_AUTH_SOCK" ] ; then
+        # すでにSSH Agentへのソケットが環境変数にあるがデフォルトのランダム形式の場合
+        case $SSH_AUTH_SOCK in
+            /tmp/*/agent.[0-9]*)
+                  ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+                  ;;
+        esac
+    elif [ -S "$SSH_AGENT_SOCK" ] ; then
+        # すでにSSH_AGENT_SOCKがソケットへのシンボリックリンクとして存在する場合
+        export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    else
+        # SSH Agentが起動していない場合
+        eval `ssh-agent` && \
+            ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
+            export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+    fi
+    # Kill unused ssh-agent process
+    ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
+    ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
+    for agent in "$(ps aux | grep -E '(ssh)-agent' | awk '{ print $1" "$2 }')"
+    do
+        user=$(echo "$agent" | awk '{ print $1 }')
+        pid=$(echo "$agent" | awk '{ print $2 }')
+        if [ "$USER" = "$user" -a "$ssh_agent_pid" != "$pid" ] ; then
+            kill $pid
+            echo "Killed PID $pid (unused ssh-agent)"
+        fi
+    done
+    for ssh_type in $SSH_DEFAULT_LIST
+    do
+        ident_file=$SSH_DEFAULT_PREFIX$ssh_type
+        if [ -f "$ident_file" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
+            ssh-add "$ident_file"
+        fi
+    done
+fi
+
+#######################################
+# User defined functions
 function mcd () {
     mkdir -p "$1" && cd "$1"
 }
@@ -415,41 +554,6 @@ if [ -x "$(which pip 2>/dev/null)" ]; then
     }
 fi
 
-# Control zsh history
-# If the function returns 0, the command will be added to the history file.
-# Otherwise, the command will not be added.
-# ref: http://mollifier.hatenablog.com/entry/20090728/p1
-# ref: http://someneat.hatenablog.jp/entry/2017/07/25/073428
-__record_command() {
-    typeset -g _LASTCMD=${1%%$'\n'}
-    return 1
-}
-zshaddhistory_functions+=(__record_command)
-
-__update_history() {
-    local last_status="$?"
-
-    # hist_ignore_space
-    if [[ ! -n ${_LASTCMD%% *} ]]; then
-        return
-    fi
-
-    # hist_reduce_blanks
-    local cmd_reduce_blanks=$(echo ${_LASTCMD} | tr -s ' ')
-
-    # ignore commands
-    local line=${_LASTCMD%%$'\n'}
-    local cmd=${line%% *}
-
-    # 以下の条件をすべて満たすものだけをヒストリに追加する
-    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
-        return
-    fi
-
-    print -sr -- "${cmd_reduce_blanks}"
-}
-precmd_functions+=(__update_history)
-
 # Args: src dst
 function replace_with_symlink () {
     rsync -av --sparse --progress $1 $2 && \
@@ -457,92 +561,12 @@ function replace_with_symlink () {
         ln -s $2 $1
 }
 
-# Show Git repository status
-# https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
-function rprompt-git-current-branch {
-    local branch_name st branch_status
-
-    git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
-    if [ "$?" != 0 ]; then
-        # gitで管理されていないディレクトリは何も返さない
-        return
-    fi
-    branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-    st=`git status 2> /dev/null`
-    if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
-        # 全てcommitされてクリーンな状態
-        branch_status="%F{green}"
-    elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
-        # gitに管理されていないファイルがある状態
-        branch_status="%F{red}?"
-    elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
-        # git addされていないファイルがある状態
-        branch_status="%F{red}+"
-    elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
-        # git commitされていないファイルがある状態
-        branch_status="%F{yellow}!"
-    elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
-        # コンフリクトが起こった状態
-        echo "%F{red}!(no branch)"
-        return
-    else
-        # 上記以外の状態の場合は青色で表示させる
-        branch_status="%F{blue}"
-    fi
-    # ブランチ名を色付きで表示する
-    echo "${branch_status}[$branch_name]%{${reset_color}%}"
-}
-
-function date-with-status-color {
-    echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"`date +%T`"%{${reset_color}%}"
-}
-
-setopt prompt_subst
-RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
-
-SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
-SSH_DEFAULT_PREFIX="$HOME/.ssh/id_"
-SSH_DEFAULT_LIST=(ed25519 ecdsa rsa)
-if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
-    if [ -S "$SSH_AUTH_SOCK" ] ; then
-        case $SSH_AUTH_SOCK in
-            /tmp/*/agent.[0-9]*)
-                  ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
-                  ;;
-        esac
-    elif [ -S "$SSH_AGENT_SOCK" ] ; then
-        export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
-    else
-        eval `ssh-agent` && \
-            ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
-            export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
-    fi
-    # Kill unused ssh-agent process
-    ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
-    ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
-    for agent in "$(ps aux | grep -E '(ssh)-agent' | awk '{ print $1" "$2 }')"
-    do
-        user=$(echo "$agent" | awk '{ print $1 }')
-        pid=$(echo "$agent" | awk '{ print $2 }')
-        if [ "$USER" = "$user" -a "$ssh_agent_pid" != "$pid" ] ; then
-            kill $pid
-            echo "Killed PID $pid (unused ssh-agent)"
-        fi
-    done
-    for ssh_type in $SSH_DEFAULT_LIST
-    do
-        ident_file=$SSH_DEFAULT_PREFIX$ssh_type
-        if [ -f "$ident_file" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
-            ssh-add "$ident_file"
-        fi
-    done
-fi
+#######################################
 
 if [ -x "`which screenfetch 2>/dev/null`" ] ; then
     screenfetch
 fi
 
-LOCAL_MOTD=$HOME/.motd
 if [ -f $LOCAL_MOTD ] ; then
     cat $LOCAL_MOTD
 fi
