@@ -23,9 +23,6 @@ fi
 autoload -Uz colors
 colors
 
-# Vim 風キーバインドにする
-#bindkey -v
-
 export ZPLUG_HOME=$HOME/.zsh/zplug
 ZSHRC_LOCAL=~/.zshrc.local
 
