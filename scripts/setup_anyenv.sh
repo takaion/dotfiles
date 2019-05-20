@@ -10,3 +10,4 @@ function setup_anyenv {
   $ANYENV_ROOT/bin/anyenv install --init
 }
 
+setup_anyenv
