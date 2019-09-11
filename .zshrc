@@ -73,7 +73,7 @@ case $(uname -m) in
 esac
 pattern="*${os}*${arch}*"
 
-if [ ! -x `which gawk 2>/dev/null` ] ; then
+if [ ! -x "`which gawk 2>/dev/null`" ] ; then
     echo "gawk is not installed. Unknown error may happen in the installation process executed next."
 fi
 
