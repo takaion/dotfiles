@@ -116,6 +116,7 @@ set listchars=tab:▸\ ,trail:-
 set scrolloff=4
 set noshowmode
 set ambiwidth=double
+set virtualedit=onemore
 
 if &term == "screen"
     set t_Co=256
@@ -207,3 +208,7 @@ nnoremap st :<C-u>tabnew<CR>
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
+
+" Shift+Tab
+nnoremap <S-Tab> <<
+inoremap <S-Tab> <C-d>
