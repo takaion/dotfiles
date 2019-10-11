@@ -416,7 +416,7 @@ fi
 
 function ssh {
     if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ] ; then
-        tmux rename-window ${@: -1}
+        tmux rename-window "[ssh]${@: -1}"
         command ssh "$@"
         tmux set-window-option automatic-rename "on" >/dev/null
     else
