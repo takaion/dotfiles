@@ -579,3 +579,6 @@ fi
 if [ -f $ZSHRC_LOCAL ]; then
     source $ZSHRC_LOCAL
 fi
+
+# Disable focus/de-focus event
+printf "\e[?1004l"
