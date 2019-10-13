@@ -526,6 +526,11 @@ function mcd () {
     mkdir -p "$1" && cd "$1"
 }
 
+_mcd() {
+  _path_files -/
+}
+compdef _mcd mcd
+
 function title () {
     echo -ne "\033]0;$@\007"
 }
