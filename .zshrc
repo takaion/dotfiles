@@ -12,20 +12,20 @@ SSH_DEFAULT_LIST=(ed25519 ecdsa rsa)
 #######################################
 # 環境変数、基本設定
 function chlng {
-    NEW_LANG=${1:-C}
-    export LANG=$NEW_LANG
-    export LANGUAGE=$NEW_LANG
-    export LC=ALL=$NEW_LANG
-    echo "Language changed to $NEW_LANG"
+  NEW_LANG=${1:-C}
+  export LANG=$NEW_LANG
+  export LANGUAGE=$NEW_LANG
+  export LC=ALL=$NEW_LANG
+  echo "Language changed to $NEW_LANG"
 }
 
 alias lang-en="chlng en_US.UTF-8"
 alias lang-ja="chlng ja_JP.UTF-8"
 
 if [ "$TERM" = "linux" ] ; then
-    lang-en >/dev/null
+  lang-en >/dev/null
 else
-    lang-ja >/dev/null
+  lang-ja >/dev/null
 fi
 
 # 色を使用できるようにする
@@ -40,41 +40,41 @@ if [ "$(uname)" = 'Darwin' ]; then
 fi
 
 if [ `which vim 2>/dev/null` ]; then
-    export EDITOR=vim
+  export EDITOR=vim
 fi
 
 #######################################
 # zplug
 if [ ! -d $ZPLUG_HOME ]; then
-    mkdir -p $ZPLUG_HOME
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+  mkdir -p $ZPLUG_HOME
+  git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
 
 source $ZPLUG_HOME/init.zsh
 
 case ${OSTYPE} in
-    darwin*)
-        os="darwin"
-        ;;
-    linux*)
-        os="linux"
+  darwin*)
+    os="darwin"
+    ;;
+  linux*)
+    os="linux"
 esac
 
 case $(uname -m) in
-    x86_64)
-        arch="amd64"
-        ;;
-    i686)
-        arch="386"
-        ;;
-    armv7l)
-        arch="arm7"
-        ;;
+  x86_64)
+    arch="amd64"
+    ;;
+  i686)
+    arch="386"
+    ;;
+  armv7l)
+    arch="arm7"
+    ;;
 esac
 pattern="*${os}*${arch}*"
 
 if [ ! -x "`which gawk 2>/dev/null`" ] ; then
-    echo "gawk is not installed. Unknown error may happen in the installation process executed next."
+  echo "gawk is not installed. Unknown error may happen in the installation process executed next."
 fi
 
 # zplug plugins list
@@ -87,9 +87,9 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 zplug "docker/compose", use:contrib/completion/zsh
 case $(uname -m) in
-    x86_64|i686)
-        zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
-        ;;
+  x86_64|i686)
+    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
+    ;;
 esac
 
 # install zplug plugins
@@ -113,12 +113,12 @@ SAVEHIST=1000000
 
 # プロンプト
 function colored-prompt () {
-    PROMPT='[%F{010}%n@%m%f: %F{006}%~%f]
+  PROMPT='[%F{010}%n@%m%f: %F{006}%~%f]
 %(!,#,$) '
 }
 
 function non-colored-prompt () {
-    PROMPT='[%n@%m: %~]
+  PROMPT='[%n@%m: %~]
 %(!,#,$) '
 }
 
@@ -128,41 +128,41 @@ PROMPT2='[%n]%_>'
 # Show Git repository status
 # https://qiita.com/nishina555/items/f4f1ddc6ed7b0b296825
 function rprompt-git-current-branch {
-    local branch_name st branch_status
+  local branch_name st branch_status
 
-    git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
-    if [ "$?" != 0 ]; then
-        # gitで管理されていないディレクトリは何も返さない
-        return
-    fi
-    branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-    st=`git status 2> /dev/null`
-    if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
-        # 全てcommitされてクリーンな状態
-        branch_status="%F{green}"
-    elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
-        # gitに管理されていないファイルがある状態
-        branch_status="%F{red}?"
-    elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
-        # git addされていないファイルがある状態
-        branch_status="%F{red}+"
-    elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
-        # git commitされていないファイルがある状態
-        branch_status="%F{yellow}!"
-    elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
-        # コンフリクトが起こった状態
-        echo "%F{red}!(no branch)"
-        return
-    else
-        # 上記以外の状態の場合は青色で表示させる
-        branch_status="%F{blue}"
-    fi
-    # ブランチ名を色付きで表示する
-    echo "${branch_status}[$branch_name]%{${reset_color}%}"
+  git status 2>&1 | head -n1 | grep 'On branch' >/dev/null 2>&1
+  if [ "$?" != 0 ]; then
+    # gitで管理されていないディレクトリは何も返さない
+    return
+  fi
+  branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
+  st=`git status 2> /dev/null`
+  if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+    # 全てcommitされてクリーンな状態
+    branch_status="%F{green}"
+  elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
+    # gitに管理されていないファイルがある状態
+    branch_status="%F{cyan}?"
+  elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
+    # git addされていないファイルがある状態
+    branch_status="%F{magenta}+"
+  elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
+    # git commitされていないファイルがある状態
+    branch_status="%F{yellow}!"
+  elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
+    # コンフリクトが起こった状態
+    echo "%F{red}!(no branch)"
+    return
+  else
+    # 上記以外の状態の場合は青色で表示させる
+    branch_status="%F{blue}"
+  fi
+  # ブランチ名を色付きで表示する
+  echo "${branch_status}[$branch_name]%{${reset_color}%}"
 }
 
 function date-with-status-color {
-    echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"`date +%T`"%{${reset_color}%}"
+  echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"`date +%T`"%{${reset_color}%}"
 }
 
 setopt prompt_subst
@@ -202,21 +202,21 @@ bindkey "^N" history-beginning-search-forward-end
 # Completion function for sudo.vim (e.g. vim sudo:/path/to/file)
 # ref: https://www.yuuan.net/item/736
 function _vimsudo {
-    local LAST="${words[$#words[*]]}"
-    case "${LAST}" in
-        sudo:*)
-            local BASEDIR="${LAST##sudo:}"
-            BASEDIR="${~BASEDIR}"
-            [ -d "${BASEDIR}" ] && BASEDIR="${BASEDIR%%/}/"
-            compadd -P 'sudo:' -f $(print ${BASEDIR}*) \
-            && return 0
-            ;;
-        *)
-            _vim && return 0
-            ;;
-        esac
+  local LAST="${words[$#words[*]]}"
+  case "${LAST}" in
+    sudo:*)
+      local BASEDIR="${LAST##sudo:}"
+      BASEDIR="${~BASEDIR}"
+      [ -d "${BASEDIR}" ] && BASEDIR="${BASEDIR%%/}/"
+      compadd -P 'sudo:' -f $(print ${BASEDIR}*) \
+      && return 0
+      ;;
+    *)
+      _vim && return 0
+      ;;
+  esac
 
-    return 1
+  return 1
 }
 
 compdef _vimsudo vim
@@ -280,9 +280,9 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # エイリアス
 
 if [ "$(uname)" = 'Darwin' ]; then
-    alias ls='ls -G'
+  alias ls='ls -G'
 else
-    alias ls='ls --color=auto'
+  alias ls='ls --color=auto'
 fi
 alias ll='ls -l'
 alias la='ls -la'
@@ -312,70 +312,70 @@ alias rsync-ssh='rsync -av -e ssh --progress --partial --append'
 # http://news.mynavi.jp/column/zsh/016/
 for target in java c h cpp txt xml log
 do
-    alias -s ${target}=zsh_pager
+  alias -s ${target}=zsh_pager
 done
 
 for target in html htm xhtml
 do
-    alias -s ${target}=zsh_webbrowser
+  alias -s ${target}=zsh_webbrowser
 done
 
 for target in jpg jpeg png gif bmp
 do
-    alias -s ${target}=zsh_imageviewer
+  alias -s ${target}=zsh_imageviewer
 done
 
 for target in mp3 m4a wav
 do
-    alias -s ${target}=zsh_audioplayer
+  alias -s ${target}=zsh_audioplayer
 done
 
 for target in mpg mpeg avi mp4
 do
-    alias -s ${target}=zsh_movieplayer
+  alias -s ${target}=zsh_movieplayer
 done
 
 zsh_pager() {
-    $(zsh_commandselector "${PAGER} less more cat") ${@+"$@"}
+  $(zsh_commandselector "${PAGER} less more cat") ${@+"$@"}
 }
 
 zsh_webbrowser() {
-    $(zsh_commandselector "open chrome firefox less") ${@+"$@"}
+  $(zsh_commandselector "open chrome firefox less") ${@+"$@"}
 }
 
 zsh_imageviewer() {
-    $(zsh_commandselector "open gthumb imageviewer display") ${@+"$@"}
+  $(zsh_commandselector "open gthumb imageviewer display") ${@+"$@"}
 }
 
 zsh_audioplayer() {
-    $(zsh_commandselector "afplay aplay vlc totem") ${@+"$@"}
+  $(zsh_commandselector "afplay aplay vlc totem") ${@+"$@"}
 }
 
 zsh_videoplayer() {
-    $(zsh_commandselector "open vlc totem") ${@+"$@"}
+  $(zsh_commandselector "open vlc totem") ${@+"$@"}
 }
 
 zsh_commandselector() {
-    for command in $(echo ${1})
-    do
-        if type "${command}" > /dev/null 2>&1 ; then
-            echo "${command}"
-            break
-        fi
-    done
+  for command in $(echo ${1})
+  do
+    if type "${command}" > /dev/null 2>&1 ; then
+      echo "${command}"
+      break
+    fi
+  done
 }
 
 # "C" で標準出力をクリップボードにコピーする
 # http://mollifier.hatenablog.com/entry/20100317/p1
 if which pbcopy >/dev/null 2>&1 ; then
-    # Mac
-    alias -g C='| pbcopy'
+  # Mac
+  alias -g C='| pbcopy'
 elif which xsel >/dev/null 2>&1 ; then
-    # Linux
-    alias -g C='| xsel --input --clipboard'
+  # Linux
+  alias -g C='| xsel --input --clipboard'
 elif which putclip >/dev/null 2>&1 ; then
-    # Cygwin
-    alias -g C='| putclip'
+  # Cygwin
+  alias -g C='| putclip'
 fi
 
 bindkey "${terminfo[khome]}" beginning-of-line
@@ -384,44 +384,44 @@ bindkey "^[[3~" delete-char
 
 # anyenv initialization
 if [ -d $HOME/.anyenv ] ; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)"
+  export PATH="$HOME/.anyenv/bin:$PATH"
+  eval "$(anyenv init -)"
 fi
 
 # pyenv initialization
 [ -d ~/.pyenv ] && \
-    export PATH=$HOME/.pyenv/bin:$PATH && \
-    eval "$(pyenv init -)"
+  export PATH=$HOME/.pyenv/bin:$PATH && \
+  eval "$(pyenv init -)"
 
 # rbenv initialization
 rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
 for r in $rbenv_dir_list; do
-    [[ -d $r ]] && \
-        export PATH=$r/bin:$PATH && \
-        eval "$(rbenv init -)" && \
-        break
+  [[ -d $r ]] && \
+    export PATH=$r/bin:$PATH && \
+    eval "$(rbenv init -)" && \
+    break
 done
 
 # rubygem initialization
 if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
-    PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
+  PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
 # Linuxbrew initialization
 if [ -d ~/.linuxbrew ] ; then
-    eval $(~/.linuxbrew/bin/brew shellenv)
+  eval $(~/.linuxbrew/bin/brew shellenv)
 elif [ -d /home/linuxbrew/.linuxbrew ] ; then
-    eval eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  eval eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 function ssh {
-    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ] ; then
-        tmux rename-window "[ssh]${@: -1}"
-        command ssh "$@"
-        tmux set-window-option automatic-rename "on" >/dev/null
-    else
-        command ssh "$@"
-    fi
+  if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ] ; then
+    tmux rename-window "[ssh]${@: -1}"
+    command ssh "$@"
+    tmux set-window-option automatic-rename "on" >/dev/null
+  else
+    command ssh "$@"
+  fi
 }
 
 # other settings for mac
@@ -452,78 +452,78 @@ fi
 # ref: http://mollifier.hatenablog.com/entry/20090728/p1
 # ref: http://someneat.hatenablog.jp/entry/2017/07/25/073428
 __record_command() {
-    typeset -g _LASTCMD=${1%%$'\n'}
-    return 1
+  typeset -g _LASTCMD=${1%%$'\n'}
+  return 1
 }
 zshaddhistory_functions+=(__record_command)
 
 __update_history() {
-    local last_status="$?"
+  local last_status="$?"
 
-    # hist_ignore_space
-    if [[ ! -n ${_LASTCMD%% *} ]]; then
-        return
-    fi
+  # hist_ignore_space
+  if [[ ! -n ${_LASTCMD%% *} ]]; then
+    return
+  fi
 
-    # hist_reduce_blanks
-    local cmd_reduce_blanks=$(echo ${_LASTCMD} | tr -s ' ')
+  # hist_reduce_blanks
+  local cmd_reduce_blanks=$(echo ${_LASTCMD} | tr -s ' ')
 
-    # ignore commands
-    local line=${_LASTCMD%%$'\n'}
-    local cmd=${line%% *}
+  # ignore commands
+  local line=${_LASTCMD%%$'\n'}
+  local cmd=${line%% *}
 
-    # 以下の条件をすべて満たすものだけをヒストリに追加する
-    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
-        return
-    fi
+  # 以下の条件をすべて満たすものだけをヒストリに追加する
+  if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
+    return
+  fi
 
-    print -sr -- "${cmd_reduce_blanks}"
+  print -sr -- "${cmd_reduce_blanks}"
 }
 precmd_functions+=(__update_history)
 
 # SSH Agent
 if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
-    if [ -S "$SSH_AUTH_SOCK" ] ; then
-        # すでにSSH Agentへのソケットが環境変数にあるがデフォルトのランダム形式の場合
-        case $SSH_AUTH_SOCK in
-            /tmp/*/agent.[0-9]*)
-                  ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
-                  ;;
-        esac
-    elif [ -S "$SSH_AGENT_SOCK" ] ; then
-        # すでにSSH_AGENT_SOCKがソケットへのシンボリックリンクとして存在する場合
-        export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
-    else
-        # SSH Agentが起動していない場合
-        eval `ssh-agent` && \
-            ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
-            export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+  if [ -S "$SSH_AUTH_SOCK" ] ; then
+    # すでにSSH Agentへのソケットが環境変数にあるがデフォルトのランダム形式の場合
+    case $SSH_AUTH_SOCK in
+      /tmp/*/agent.[0-9]*)
+        ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+        ;;
+    esac
+  elif [ -S "$SSH_AGENT_SOCK" ] ; then
+    # すでにSSH_AGENT_SOCKがソケットへのシンボリックリンクとして存在する場合
+    export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+  else
+    # SSH Agentが起動していない場合
+    eval `ssh-agent` && \
+      ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
+      export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
+  fi
+  # Kill unused ssh-agent process
+  ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
+  ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
+  for agent in $(ps aux | grep -E '(ssh)-agent' | awk '{ print $1"@"$2 }')
+  do
+    user=$(echo "${agent/@/ }" | awk '{ print $1 }')
+    pid=$(echo "${agent/@/ }" | awk '{ print $2 }')
+    if [ "$USER" = "$user" -a "$ssh_agent_pid" != "$pid" ] ; then
+      kill $pid
+      echo "Killed PID $pid (unused ssh-agent)"
     fi
-    # Kill unused ssh-agent process
-    ssh_agent_real_path=$(readlink $SSH_AUTH_SOCK)
-    ssh_agent_pid=$(expr 1 + ${ssh_agent_real_path##*.})
-    for agent in $(ps aux | grep -E '(ssh)-agent' | awk '{ print $1"@"$2 }')
-    do
-        user=$(echo "${agent/@/ }" | awk '{ print $1 }')
-        pid=$(echo "${agent/@/ }" | awk '{ print $2 }')
-        if [ "$USER" = "$user" -a "$ssh_agent_pid" != "$pid" ] ; then
-            kill $pid
-            echo "Killed PID $pid (unused ssh-agent)"
-        fi
-    done
-    for ssh_type in $SSH_DEFAULT_LIST
-    do
-        ident_file=$SSH_DEFAULT_PREFIX$ssh_type
-        if [ -f "$ident_file" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
-            ssh-add "$ident_file"
-        fi
-    done
+  done
+  for ssh_type in $SSH_DEFAULT_LIST
+  do
+    ident_file=$SSH_DEFAULT_PREFIX$ssh_type
+    if [ -f "$ident_file" -a $(ssh-add -l 2>&1 | grep 'no identities' >/dev/null; echo $?) = 0 ] ; then
+      ssh-add "$ident_file"
+    fi
+  done
 fi
 
 #######################################
 # User defined functions
 function mcd () {
-    mkdir -p "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1"
 }
 
 _mcd() {
@@ -532,57 +532,57 @@ _mcd() {
 compdef _mcd mcd
 
 function title () {
-    echo -ne "\033]0;$@\007"
+  echo -ne "\033]0;$@\007"
 }
 
 function github_keys () {
-    # for GNU/BSD grep
-    curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
+  # for GNU/BSD grep
+  curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
 }
 
 function color_test () {
-    for c in {000..255}
-    do
-        echo -n "\e[38;5;${c}m $c"
-        [ $(($c%16)) -eq 15 ] && echo
-    done
-    echo
+  for c in {000..255}
+  do
+    echo -n "\e[38;5;${c}m $c"
+    [ $(($c%16)) -eq 15 ] && echo
+  done
+  echo
 }
 
 # tmux shortcut from https://www.ebiebievidence.com/posts/tmux-ls-attach-new-alias/
 t () {
-    tmux attach -t $1 2> /dev/null || tmux new -s $1 2> /dev/null || tmux ls
+  tmux attach -t $1 2> /dev/null || tmux new -s $1 2> /dev/null || tmux ls
 }
 
 _t() { _values 'sessions' "${(@f)$(tmux ls -F '#S' 2>/dev/null )}" }
 compdef _t t
 
 if [ -x "$(which pip 2>/dev/null)" ]; then
-    function pip-update () {
-        pip list --outdated --format=columns | tail -n+3 | awk '{print $1}' | xargs pip install -U pip
-    }
+  function pip-update () {
+    pip list --outdated --format=columns | tail -n+3 | awk '{print $1}' | xargs pip install -U pip
+  }
 fi
 
 # Args: src dst
 function replace_with_symlink () {
-    rsync -av --sparse --progress $1 $2 && \
-        rm -f $1 && \
-        ln -s $2 $1
+  rsync -av --sparse --progress $1 $2 && \
+    rm -f $1 && \
+    ln -s $2 $1
 }
 
 #######################################
 
 if [ -x "`which screenfetch 2>/dev/null`" ] ; then
-    screenfetch
+  screenfetch
 fi
 
 if [ -f $LOCAL_MOTD ] ; then
-    cat $LOCAL_MOTD
+  cat $LOCAL_MOTD
 fi
 
 # Load local zshrc
 if [ -f $ZSHRC_LOCAL ]; then
-    source $ZSHRC_LOCAL
+  source $ZSHRC_LOCAL
 fi
 
 # Disable focus/de-focus event
