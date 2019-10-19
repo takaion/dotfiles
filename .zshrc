@@ -74,7 +74,7 @@ esac
 pattern="*${os}*${arch}*"
 
 if [ ! -x "`which gawk 2>/dev/null`" ] ; then
-    echo "gawk is not installed. Unknown error may happen in the installation process executed next."
+  echo "gawk is not installed. Unknown error may happen in the installation process executed next."
 fi
 
 # zplug plugins list
@@ -142,10 +142,10 @@ function rprompt-git-current-branch {
     branch_status="%F{green}"
   elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
     # gitに管理されていないファイルがある状態
-    branch_status="%F{red}?"
+    branch_status="%F{cyan}?"
   elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
     # git addされていないファイルがある状態
-    branch_status="%F{red}+"
+    branch_status="%F{magenta}+"
   elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
     # git commitされていないファイルがある状態
     branch_status="%F{yellow}!"
