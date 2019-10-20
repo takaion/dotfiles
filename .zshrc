@@ -475,7 +475,7 @@ __update_history() {
     local cmd=${line%% *}
 
     # 以下の条件をすべて満たすものだけをヒストリに追加する
-    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|\.|man|git (add|commit|(checkout( -b)?|branch) [^/]+/[^/]+))')" ]; then
+    if [ ${#line} -ge 5 -a ! -z "$(echo ${line} | grep -E '^(l[sal]|cd|man|git (add|commit|((checkout|co)( -b)?|branch) [A-Za-z/-]+))')" ]; then
         return
     fi
 
