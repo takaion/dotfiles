@@ -39,6 +39,8 @@ if [ "$(uname)" = 'Darwin' ]; then
   export PATH="$PATH:/Library/TeX/texbin"
 fi
 
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/usr/lib"
+
 if [ `which vim 2>/dev/null` ]; then
     export EDITOR=vim
 fi
