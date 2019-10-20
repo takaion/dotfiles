@@ -19,10 +19,26 @@ function chlng {
   echo "Language changed to $NEW_LANG"
 }
 
+function path_include {
+  local var_name=$1
+  local var_value=$(eval echo '$'$var_name)
+  local target=$2
+  if [ ! -z "$(echo $var_value | grep '\(^\|:\)'"$target"'\($\|:\)')" ] ; then
+    echo 1; return 0
+  fi
+  echo 0; return 1
+}
+
 function add_env_path {
   local name=$1
   local add_value=$2
   local org_value=$(eval echo '$'$name)
+
+  if path_include "$name" "$add_value" >/dev/null; then
+    echo "$name already has $add_value"
+    return
+  fi
+
   if [ -z "$org_value" ] ; then
     export $name="$add_value"
   else
@@ -51,6 +67,7 @@ if [ "$(uname)" = 'Darwin' ]; then
 fi
 
 add_env_path LD_LIBRARY_PATH "$HOME/usr/lib"
+add_env_path MANPATH "$HOME/usr/share/man"
 
 if [ `which vim 2>/dev/null` ]; then
   export EDITOR=vim
