@@ -416,27 +416,27 @@ bindkey "^[[3~" delete-char
 
 # anyenv initialization
 if [ -d $HOME/.anyenv ] ; then
-  export PATH="$HOME/.anyenv/bin:$PATH"
+  add_env_path PATH "$HOME/.anyenv/bin"
   eval "$(anyenv init -)"
 fi
 
 # pyenv initialization
 [ -d ~/.pyenv ] && \
-  export PATH=$HOME/.pyenv/bin:$PATH && \
+  add_env_path PATH "$HOME/.pyenv/bin" && \
   eval "$(pyenv init -)"
 
 # rbenv initialization
 rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
 for r in $rbenv_dir_list; do
   [[ -d $r ]] && \
-    export PATH=$r/bin:$PATH && \
+    add_env_path PATH "$r/bin" && \
     eval "$(rbenv init -)" && \
     break
 done
 
 # rubygem initialization
 if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
-  PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
+  add_env_path PATH "$(ruby -rrubygems -e 'puts Gem.user_dir')/bin"
 fi
 
 # Linuxbrew initialization
