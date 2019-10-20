@@ -19,6 +19,17 @@ function chlng {
   echo "Language changed to $NEW_LANG"
 }
 
+function add_env_path {
+  local name=$1
+  local add_value=$2
+  local org_value=$(eval echo '$'$name)
+  if [ -z "$org_value" ] ; then
+    export $name="$add_value"
+  else
+    export $name="$add_value:$org_value"
+  fi
+}
+
 alias lang-en="chlng en_US.UTF-8"
 alias lang-ja="chlng ja_JP.UTF-8"
 
@@ -36,10 +47,10 @@ export ZPLUG_HOME=$HOME/.zsh/zplug
 
 export PATH="$HOME/bin:$HOME/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 if [ "$(uname)" = 'Darwin' ]; then
-  export PATH="$PATH:/Library/TeX/texbin"
+  add_env_path PATH "/Library/TeX/texbin"
 fi
 
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/usr/lib"
+add_env_path LD_LIBRARY_PATH "$HOME/usr/lib"
 
 if [ `which vim 2>/dev/null` ]; then
   export EDITOR=vim
