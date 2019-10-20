@@ -1,10 +1,12 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(dirname $0)/scripts
+abs_base_dir=$(cd $(dirname $0); pwd)
+BASE_DIR=${abs_base_dir#$HOME/}
+SCRIPT_DIR="$BASE_DIR/scripts"
 
 function make_symlink {
   local target_files=(.bashrc .gitconfig .gitignore_global .tmux.conf .vimrc .zshrc)
-  local from_dir="$(dirname $0)"
+  local from_dir="$BASE_DIR"
   local to_dir="$HOME"
 
   for f in "${target_files[@]}"; do
