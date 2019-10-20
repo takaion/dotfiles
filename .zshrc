@@ -412,7 +412,8 @@ fi
 
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
-bindkey "^[[3~" delete-char
+bindkey "${terminfo[kdch1]}" delete-char
+bindkey "^[[Z" reverse-menu-complete
 
 # anyenv initialization
 if [ -d $HOME/.anyenv ] ; then
