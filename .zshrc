@@ -67,6 +67,8 @@ if [ "$(uname)" = 'Darwin' ]; then
 fi
 
 add_env_path LD_LIBRARY_PATH "$HOME/usr/lib"
+
+add_env_path MANPATH ":"
 add_env_path MANPATH "$HOME/usr/share/man"
 
 if [ `which vim 2>/dev/null` ]; then
