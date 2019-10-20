@@ -583,8 +583,19 @@ function color_test () {
 }
 
 # tmux shortcut from https://www.ebiebievidence.com/posts/tmux-ls-attach-new-alias/
+# Improved by takaion
 t () {
-  tmux attach -t $1 2> /dev/null || tmux new -s $1 2> /dev/null || tmux ls
+  local opt=
+  local session=
+  while [ $# -gt 1 ]
+  do
+    test -z "$opt" && opt=$1 || opt="$opt $1"
+    shift
+  done
+  session=$1
+  tmux attach ${=opt} -t "$session" 2> /dev/null \
+    || tmux new ${=opt} -s "$session" 2> /dev/null \
+    || tmux ls
 }
 
 _t() { _values 'sessions' "${(@f)$(tmux ls -F '#S' 2>/dev/null )}" }
