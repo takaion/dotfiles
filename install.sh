@@ -12,6 +12,11 @@ function make_symlink {
   for f in "${target_files[@]}"; do
     from="$from_dir/$f"
     to="$to_dir/$f"
+
+    if [ ! -f "$from" ] ; then
+      continue
+    fi
+
     if [ -h "$to" ] ; then
       rm -f "$to"
     elif [ -e "$to" ] ; then
