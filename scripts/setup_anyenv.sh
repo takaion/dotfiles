@@ -10,4 +10,6 @@ function setup_anyenv {
   $ANYENV_ROOT/bin/anyenv install --init
 }
 
-setup_anyenv
+if [ ! -d "$ANYENV_ROOT" ] ; then
+  setup_anyenv
+fi
