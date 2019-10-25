@@ -1,13 +1,21 @@
 # .zshrc
+# Function definition style: function func_name { ... }
 
-# この.zshrcで扱う変数
-ZSHRC_LOCAL=~/.zshrc.local
+#######################################
+# Constants (used only in .zshrc)
+LOCAL_ZSHRC="$HOME/.zshrc.local"
 LOCAL_MOTD=$HOME/.motd
 # SSH_AGENT_SOCK: SSH_AUTH_SOCKをここで指定したファイル名に固定する
 SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
 # SSH_DEFAULT_{PREFIX,LIST}: SSH Agentに鍵が1つもない場合探すファイルのプレフィックスとファイル名リスト
 SSH_DEFAULT_PREFIX="$HOME/.ssh/id_"
 SSH_DEFAULT_LIST=(ed25519 ecdsa rsa)
+
+#######################################
+# Functions / aliases
+function has () {
+  which "$1" >/dev/null 2>&1
+}
 
 #######################################
 # 環境変数、基本設定
@@ -23,10 +31,7 @@ function path_include {
   local var_name=$1
   local var_value=$(eval echo '$'$var_name)
   local target=$2
-  if [ ! -z "$(echo $var_value | grep '\(^\|:\)'"$target"'\($\|:\)')" ] ; then
-    echo 1; return 0
-  fi
-  echo 0; return 1
+  test "$(echo $var_value | grep '\(^\|:\)'"$target"'\($\|:\)')"
 }
 
 function add_env_path {
@@ -34,8 +39,8 @@ function add_env_path {
   local add_value=$2
   local org_value=$(eval echo '$'$name)
 
-  if path_include "$name" "$add_value" >/dev/null; then
-    echo "$name already has $add_value"
+  if path_include "$name" "$add_value"; then
+    echo "$name already has $add_value" 1>&2
     return
   fi
 
@@ -71,7 +76,7 @@ add_env_path LD_LIBRARY_PATH "$HOME/usr/lib"
 add_env_path MANPATH ":"
 add_env_path MANPATH "$HOME/usr/share/man"
 
-if [ `which vim 2>/dev/null` ]; then
+if has vim; then
   export EDITOR=vim
 fi
 
@@ -105,7 +110,7 @@ case $(uname -m) in
 esac
 pattern="*${os}*${arch}*"
 
-if [ ! -x "`which gawk 2>/dev/null`" ] ; then
+if ! has gawk ; then
   echo "gawk is not installed. Unknown error may happen in the installation process executed next."
 fi
 
@@ -167,21 +172,21 @@ function rprompt-git-current-branch {
     # gitで管理されていないディレクトリは何も返さない
     return
   fi
-  branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-  st=`git status 2> /dev/null`
-  if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+  branch_name=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+  st=$(git status 2> /dev/null)
+  if [ "$(echo "$st" | grep "^nothing to")" ]; then
     # 全てcommitされてクリーンな状態
     branch_status="%F{green}"
-  elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
+  elif [ "$(echo "$st" | grep "^Untracked files")" ]; then
     # gitに管理されていないファイルがある状態
     branch_status="%F{cyan}?"
-  elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
+  elif [ "$(echo "$st" | grep "^Changes not staged for commit")" ]; then
     # git addされていないファイルがある状態
     branch_status="%F{magenta}+"
-  elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
+  elif [ "$(echo "$st" | grep "^Changes to be committed")" ]; then
     # git commitされていないファイルがある状態
     branch_status="%F{yellow}!"
-  elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
+  elif [ "$(echo "$st" | grep "^rebase in progress")" ]; then
     # コンフリクトが起こった状態
     echo "%F{red}!(no branch)"
     return
@@ -194,11 +199,11 @@ function rprompt-git-current-branch {
 }
 
 function date-with-status-color {
-  echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"`date +%T`"%{${reset_color}%}"
+  echo "%(?.%{${fg[green]}%}.%{${fg[red]}%})"$(date +%T)"%{${reset_color}%}"
 }
 
 setopt prompt_subst
-RPROMPT='`date-with-status-color` `rprompt-git-current-branch`'
+RPROMPT='$(date-with-status-color) $(rprompt-git-current-branch)'
 
 # additional zplug pluins settings
 bindkey '^[[A' history-substring-search-up
@@ -399,13 +404,13 @@ zsh_commandselector() {
 
 # "C" で標準出力をクリップボードにコピーする
 # http://mollifier.hatenablog.com/entry/20100317/p1
-if which pbcopy >/dev/null 2>&1 ; then
+if has pbcopy ; then
   # Mac
   alias -g C='| pbcopy'
-elif which xsel >/dev/null 2>&1 ; then
+elif has xsel ; then
   # Linux
   alias -g C='| xsel --input --clipboard'
-elif which putclip >/dev/null 2>&1 ; then
+elif has putclip ; then
   # Cygwin
   alias -g C='| putclip'
 fi
@@ -436,7 +441,7 @@ for r in $rbenv_dir_list; do
 done
 
 # rubygem initialization
-if which ruby >/dev/null 2>/dev/null && which gem >/dev/null; then
+if has ruby && has gem; then
   add_env_path PATH "$(ruby -rrubygems -e 'puts Gem.user_dir')/bin"
 fi
 
@@ -515,7 +520,7 @@ __update_history() {
 precmd_functions+=(__update_history)
 
 # SSH Agent
-if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
+if [ "$(uname)" = "Linux" ] && has ssh-agent; then
   if [ -S "$SSH_AUTH_SOCK" ] ; then
     # すでにSSH Agentへのソケットが環境変数にあるがデフォルトのランダム形式の場合
     case $SSH_AUTH_SOCK in
@@ -528,7 +533,7 @@ if [ "$(uname)" = "Linux" -a -x "$(which ssh-agent)" ] ; then
     export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
   else
     # SSH Agentが起動していない場合
-    eval `ssh-agent` && \
+    eval $(ssh-agent) && \
       ln -sf "$SSH_AUTH_SOCK" $SSH_AGENT_SOCK && \
       export SSH_AUTH_SOCK=$SSH_AGENT_SOCK
   fi
@@ -601,7 +606,7 @@ t () {
 _t() { _values 'sessions' "${(@f)$(tmux ls -F '#S' 2>/dev/null )}" }
 compdef _t t
 
-if [ -x "$(which pip 2>/dev/null)" ]; then
+if has pip; then
   function pip-update () {
     pip list --outdated --format=columns | tail -n+3 | awk '{print $1}' | xargs pip install -U pip
   }
@@ -616,7 +621,7 @@ function replace_with_symlink () {
 
 #######################################
 
-if [ -x "`which screenfetch 2>/dev/null`" ] ; then
+if has screenfetch; then
   screenfetch
 fi
 
@@ -625,8 +630,8 @@ if [ -f $LOCAL_MOTD ] ; then
 fi
 
 # Load local zshrc
-if [ -f $ZSHRC_LOCAL ]; then
-  source $ZSHRC_LOCAL
+if [ -f $LOCAL_ZSHRC ]; then
+  source $LOCAL_ZSHRC
 fi
 
 # Disable focus/de-focus event
