@@ -570,7 +570,11 @@ _mcd() {
 compdef _mcd mcd
 
 function title () {
-  echo -ne "\033]0;$@\007"
+  if [ "$TMUX" ]; then
+    tmux rename-window "$@"
+  else
+    echo -ne "\033]0;$@\007"
+  fi
 }
 
 function github_keys () {
