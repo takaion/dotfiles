@@ -4,7 +4,6 @@
 #######################################
 # Constants (used only in .zshrc)
 LOCAL_ZSHRC="$HOME/.zshrc.local"
-LOCAL_MOTD=$HOME/.motd
 # SSH_AGENT_SOCK: SSH_AUTH_SOCKをここで指定したファイル名に固定する
 SSH_AGENT_SOCK="$HOME/.ssh/ssh-agent.sock"
 # SSH_DEFAULT_{PREFIX,LIST}: SSH Agentに鍵が1つもない場合探すファイルのプレフィックスとファイル名リスト
@@ -39,10 +38,7 @@ function add_env_path {
   local add_value=$2
   local org_value=$(eval echo '$'$name)
 
-  if path_include "$name" "$add_value"; then
-    echo "$name already has $add_value" 1>&2
-    return
-  fi
+  path_include "$name" "$add_value" && return
 
   if [ -z "$org_value" ] ; then
     export $name="$add_value"
@@ -76,9 +72,7 @@ add_env_path LD_LIBRARY_PATH "$HOME/usr/lib"
 add_env_path MANPATH ":"
 add_env_path MANPATH "$HOME/usr/share/man"
 
-if has vim; then
-  export EDITOR=vim
-fi
+has vim && export EDITOR=vim
 
 #######################################
 # zplug
@@ -89,45 +83,15 @@ fi
 
 source $ZPLUG_HOME/init.zsh
 
-case ${OSTYPE} in
-  darwin*)
-    os="darwin"
-    ;;
-  linux*)
-    os="linux"
-esac
-
-case $(uname -m) in
-  x86_64)
-    arch="amd64"
-    ;;
-  i686)
-    arch="386"
-    ;;
-  armv7l)
-    arch="arm7"
-    ;;
-esac
-pattern="*${os}*${arch}*"
-
-if ! has gawk ; then
-  echo "gawk is not installed. Unknown error may happen in the installation process executed next."
-fi
+has gawk || \
+  echo "gawk is not installed. Unknown error may happen in the installation process executed next." >&2
 
 # zplug plugins list
 zplug "zplug/zplug"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-history-substring-search"
-zplug "mrowa44/emojify", as:command
-zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"${pattern}"
-zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 zplug "docker/compose", use:contrib/completion/zsh
-case $(uname -m) in
-  x86_64|i686)
-    zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
-    ;;
-esac
 
 # install zplug plugins
 if ! zplug check --verbose; then
@@ -267,7 +231,7 @@ setopt print_eight_bit
 # ビープ音の無効化
 setopt no_beep
 
-# フローコントロールの無効化
+# Ctrl+S, Ctrl+Qによるフローコントロールの無効化
 setopt no_flow_control
 
 # Ctrl-D で zsh を終了しない
@@ -329,8 +293,6 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 alias mkdir='mkdir -p'
-alias du='du -h'
-alias df='df -h'
 alias grep='grep --color=auto'
 
 # sudo コマンドの後のコマンドでエイリアスを有効にする
@@ -341,66 +303,8 @@ alias -g L='| less'
 alias -g G='| grep'
 
 alias vim='vim -p'
-alias v='vim'
 
 alias rsync-ssh='rsync -av -e ssh --progress --partial --append'
-
-# 拡張子に応じて自動実行するエイリアス
-# http://news.mynavi.jp/column/zsh/016/
-for target in java c h cpp txt xml log
-do
-  alias -s ${target}=zsh_pager
-done
-
-for target in html htm xhtml
-do
-  alias -s ${target}=zsh_webbrowser
-done
-
-for target in jpg jpeg png gif bmp
-do
-  alias -s ${target}=zsh_imageviewer
-done
-
-for target in mp3 m4a wav
-do
-  alias -s ${target}=zsh_audioplayer
-done
-
-for target in mpg mpeg avi mp4
-do
-  alias -s ${target}=zsh_movieplayer
-done
-
-zsh_pager() {
-  $(zsh_commandselector "${PAGER} less more cat") ${@+"$@"}
-}
-
-zsh_webbrowser() {
-  $(zsh_commandselector "open chrome firefox less") ${@+"$@"}
-}
-
-zsh_imageviewer() {
-  $(zsh_commandselector "open gthumb imageviewer display") ${@+"$@"}
-}
-
-zsh_audioplayer() {
-  $(zsh_commandselector "afplay aplay vlc totem") ${@+"$@"}
-}
-
-zsh_videoplayer() {
-  $(zsh_commandselector "open vlc totem") ${@+"$@"}
-}
-
-zsh_commandselector() {
-  for command in $(echo ${1})
-  do
-    if type "${command}" > /dev/null 2>&1 ; then
-      echo "${command}"
-      break
-    fi
-  done
-}
 
 # "C" で標準出力をクリップボードにコピーする
 # http://mollifier.hatenablog.com/entry/20100317/p1
@@ -426,30 +330,9 @@ if [ -d $HOME/.anyenv ] ; then
   eval "$(anyenv init -)"
 fi
 
-# pyenv initialization
-[ -d ~/.pyenv ] && \
-  add_env_path PATH "$HOME/.pyenv/bin" && \
-  eval "$(pyenv init -)"
-
-# rbenv initialization
-rbenv_dir_list=("${HOME}/.rbenv" "/usr/local/rbenv")
-for r in $rbenv_dir_list; do
-  [[ -d $r ]] && \
-    add_env_path PATH "$r/bin" && \
-    eval "$(rbenv init -)" && \
-    break
-done
-
 # rubygem initialization
 if has ruby && has gem; then
   add_env_path PATH "$(ruby -rrubygems -e 'puts Gem.user_dir')/bin"
-fi
-
-# Linuxbrew initialization
-if [ -d ~/.linuxbrew ] ; then
-  eval $(~/.linuxbrew/bin/brew shellenv)
-elif [ -d /home/linuxbrew/.linuxbrew ] ; then
-  eval eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 function ssh {
@@ -577,11 +460,6 @@ function title () {
   fi
 }
 
-function github_keys () {
-  # for GNU/BSD grep
-  curl -L "https://api.github.com/users/$1/keys" 2>/dev/null | grep -oE 'ssh-[^"]+'
-}
-
 function color_test () {
   for c in {000..255}
   do
@@ -624,14 +502,6 @@ function replace_with_symlink () {
 }
 
 #######################################
-
-if has screenfetch; then
-  screenfetch
-fi
-
-if [ -f $LOCAL_MOTD ] ; then
-  cat $LOCAL_MOTD
-fi
 
 # Load local zshrc
 if [ -f $LOCAL_ZSHRC ]; then
