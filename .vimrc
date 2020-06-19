@@ -4,54 +4,55 @@
 scriptencoding utf-8
 
 " General
+let s:vim_home = expand('~/.vim/')
+let s:dein_dir = s:vim_home . '/dein'
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+
 if has('vim_starting')
-    if &compatible
-        set nocompatible
-    endif
+  if &compatible
+    set nocompatible
+  endif
 
-    :call system("mkdir -p ~/.vim/{bundle,backup}")
+  if !isdirectory(s:dein_repo_dir)
+    call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+  endif
 
-    if !isdirectory(expand('~/.vim/bundle/neobundle.vim/'))
-        echo "Installing NeoBundle.."
-        :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
-    endif
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+  let &runtimepath = s:dein_repo_dir . "," . &runtimepath
 endif
-call neobundle#begin(expand('~/.vim/bundle'))
-let g:neobundle_default_git_protocol='https'
 
-NeoBundleFetch 'Shougo/neobundle.vim'
-" Colorscheme
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'chriskempson/vim-tomorrow-theme'
-" Plugins
-NeoBundle 'Shougo/vimproc', {
-    \ 'build' : {
-    \     'windows' : 'make -f make_mingw32.mak',
-    \     'cygwin' : 'make -f make_cygwin.mak',
-    \     'mac' : 'make -f make_mac.mak',
-    \     'unix' : 'make -f make_unix.mak',
-    \    },
-    \ }
-NeoBundle 'tpope/vim-endwise', {
-  \ 'autoload' : { 'insert' : 1, } }
-NeoBundle 'Shougo/unite.vim/'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'Townk/vim-autoclose'
-NeoBundle 'sudo.vim'
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-" Languages
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'othree/yajs.vim'
-NeoBundle 'maxmellon/vim-jsx-pretty'
-NeoBundle 'othree/javascript-libraries-syntax.vim'
-NeoBundle 'othree/es.next.syntax.vim'
+  " Plugins
+  call dein#add(s:dein_repo_dir)
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
+  " Appearance, Colorscheme
+  call dein#add('tomasr/molokai')
+  call dein#add('itchyny/lightline.vim')
+  " Languages/Formatting
+  call dein#add('Townk/vim-autoclose')
+  call dein#add('tpope/vim-endwise')
+  call dein#add('vim-ruby/vim-ruby')
+  call dein#add('othree/yajs.vim')
+  call dein#add('othree/es.next.syntax.vim')
+  call dein#add('maxmellon/vim-jsx-pretty')
+  call dein#add('othree/javascript-libraries-syntax.vim')
+  " Others
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('airblade/vim-gitgutter')
+  call dein#add('sudo.vim')
 
-NeoBundleCheck
-call neobundle#end()
+  call dein#end()
+  call dein#save_state()
+endif
+
+if has('vim_starting') && dein#check_install()
+  call dein#install()
+endif
 
 " Plugin Settings
 " vim-gitgutter
@@ -101,10 +102,10 @@ endfunction
 " Display
 syntax on
 colorscheme koehler
-if filereadable(expand('~/.vim/bundle/vim-hybrid/colors/hybrid.vim'))
-    colorscheme molokai
-    highlight Normal ctermbg=none
-    highlight Comment ctermfg=darkgray
+if filereadable(s:dein_dir . '/repos/github.com/tomasr/molokai/colors/molokai.vim')
+  colorscheme molokai
+  highlight Normal ctermbg=none
+  highlight Comment ctermfg=darkgray
 endif
 set wildmenu
 set number
@@ -119,7 +120,7 @@ set ambiwidth=double
 set virtualedit=onemore
 
 if &term == "screen"
-    set t_Co=256
+  set t_Co=256
 endif
 
 " =====================================
@@ -157,7 +158,6 @@ au FileType sh,zsh,ruby,yaml,html,htmldjango,javascript,css setlocal expandtab t
 
 " =====================================
 " Files
-set backupdir=$HOME/.vim/backup
 set confirm
 set hidden
 set autoread
