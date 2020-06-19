@@ -44,7 +44,7 @@ if dein#load_state(s:dein_dir)
   " Others
   call dein#add('tpope/vim-fugitive')
   call dein#add('airblade/vim-gitgutter')
-  call dein#add('sudo.vim')
+  call dein#add('vim-scripts/sudo.vim')
 
   call dein#end()
   call dein#save_state()
