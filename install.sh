@@ -26,6 +26,7 @@ function make_symlink {
       echo "Backed up $to"
     fi
     ln -s $from $to
+    echo "Make symbolic link $from (to $to)"
   done
 }
 
