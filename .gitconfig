@@ -36,6 +36,8 @@
     ci = commit -a # All modified files
     cam  = commit -a --amend
     co = checkout
+    sw = switch
+    swc = switch -c
     # branch
     br = branch
     ba = branch -a
