@@ -1,8 +1,1 @@
-# Temporary files
-*.swp
-*.o
-.DS_Store
-._.DS_Store
-*~
-*.log
-texfiles/
+.config/git/ignore

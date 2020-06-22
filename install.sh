@@ -5,7 +5,7 @@ BASE_DIR=${abs_base_dir#$HOME/}
 SCRIPT_DIR="$BASE_DIR/scripts"
 
 function make_symlink {
-  local target_files=(.bashrc .gitconfig .gitignore_global .tmux.conf .vimrc .zshrc)
+  local target_files=(.bashrc .gitconfig .config/git/ignore .tmux.conf .vimrc .zshrc)
   local from_dir="$BASE_DIR"
   local to_dir="$HOME"
 
@@ -16,6 +16,8 @@ function make_symlink {
     if [ ! -f "$from" ] ; then
       continue
     fi
+
+    mkdir -p "$(dirname "$to")"
 
     if [ -h "$to" ] ; then
       rm -f "$to"
