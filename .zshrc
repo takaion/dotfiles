@@ -303,6 +303,7 @@ alias -g L='| less'
 alias -g G='| grep'
 
 alias vim='vim -p'
+alias df='df -h'
 
 alias rsync-ssh='rsync -av -e ssh --progress --partial --append'
 
