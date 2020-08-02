@@ -306,6 +306,7 @@ alias vim='vim -p'
 alias df='df -h'
 
 alias rsync-ssh='rsync -av -e ssh --progress --partial --append'
+alias mkvenv='python -m venv --prompt $(basename $PWD) venv'
 
 # "C" で標準出力をクリップボードにコピーする
 # http://mollifier.hatenablog.com/entry/20100317/p1
