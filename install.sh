@@ -5,9 +5,11 @@ BASE_DIR=${abs_base_dir#$HOME/}
 SCRIPT_DIR="$BASE_DIR/scripts"
 
 function make_symlink {
-  local target_files=(.bashrc .gitconfig .config/git/ignore .tmux.conf .vimrc .zshrc)
+  local target_files=(.gitconfig .config/git/ignore .tmux.conf .vimrc .zshrc)
   local from_dir="$BASE_DIR"
   local to_dir="$HOME"
+
+  echo "To set up .bashrc, run scripts/setup_bashrc.sh instead of $0" >&2
 
   for f in "${target_files[@]}"; do
     from="$from_dir/$f"
